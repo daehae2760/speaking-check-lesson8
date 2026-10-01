@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 8 Speaking Check - 10 Questions</title>
+<style>
+:root{--navy:#173c61;--sky:#eef8ff;--line:#cfe0ec;--green:#e8f7ef;--yellow:#fff4c9;--ink:#183247}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,sans-serif;background:linear-gradient(#dff2ff,#f9fcff);color:var(--ink)}
+.wrap{max-width:980px;margin:0 auto;padding:18px}
+.shell{background:#fff;border:3px solid var(--navy);border-radius:26px;overflow:hidden;box-shadow:0 10px 28px rgba(20,57,91,.12)}
+header{background:linear-gradient(90deg,#173c61,#286690);color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+h1{margin:0;font-size:30px}.sub{font-size:14px;opacity:.9;margin-top:4px}.badge{background:#fff;color:var(--navy);border-radius:999px;padding:9px 13px;font-weight:800}
+main{padding:20px}
+.intro{background:var(--sky);border:2px dashed #58a8dd;border-radius:16px;padding:13px 15px;font-size:18px;line-height:1.5;margin-bottom:15px}
+.topbar{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-bottom:14px}
+.progress{height:14px;background:#e7eef4;border-radius:999px;overflow:hidden}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#4aa3df,#75c9ef);transition:.25s}.counter{font-weight:900}
+.task{border:2px solid var(--line);border-radius:20px;background:#fffdf8;padding:22px;min-height:405px}
+.role{display:inline-block;padding:7px 12px;border-radius:999px;background:var(--yellow);font-weight:900;margin-bottom:10px}.role.passenger{background:var(--green)}
+.prompt{font-size:28px;font-weight:900;color:var(--navy);line-height:1.35;margin:8px 0 10px}.hint{font-size:18px;line-height:1.5}
+.foods{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.food{background:#fff;border:2px solid #d7e5ee;border-radius:14px;padding:10px 14px;font-weight:900;font-size:19px}
+.dialog{margin:15px 0;padding:13px 15px;border-radius:14px;background:#f7fbfe;border:2px solid #d9e8f2;font-size:20px;line-height:1.55}
+.answer{display:none;background:#fff;border-left:6px solid #4aa3df;border-radius:12px;padding:14px 16px;margin-top:14px;font-size:24px;font-weight:900}
+.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+button{border:0;border-radius:14px;padding:13px 18px;font-size:17px;font-weight:900;cursor:pointer}
+.primary{background:var(--navy);color:#fff}.secondary{background:#e9f3fb;color:var(--navy)}.success{background:#dff5e7;color:#1e6b3a}.warn{background:#fff0c7;color:#744f00}
+button:disabled{opacity:.45;cursor:not-allowed}
+.speechbox{display:none;margin-top:16px;padding:14px 16px;border-radius:14px;background:#f3f9fd;border:2px solid #cfe3f0;font-size:18px}.speechtext{margin-top:6px;font-size:22px;font-weight:900;color:var(--navy)}.feedback{margin-top:8px;font-weight:900}
+.self{display:none;margin-top:18px;border:3px solid var(--navy);border-radius:20px;background:#fff;padding:20px}.self h2{margin:0 0 8px;color:var(--navy)}
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 6px;border-bottom:1px solid #e6edf2;font-size:19px;line-height:1.45}.check input{width:24px;height:24px;margin-top:2px}
+.done{display:none;margin-top:16px;padding:14px;background:var(--green);border-radius:14px;text-align:center;font-size:20px;font-weight:900}
+.footer{text-align:center;color:#687e8e;padding:10px 20px 18px;font-size:13px}
+@media(max-width:650px){h1{font-size:23px}.prompt{font-size:22px}.answer{font-size:20px}.task{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="shell">
+<header>
+  <div><h1>✈️ Lesson 8 · Speaking Check</h1><div class="sub">What Would You Like? · 10 Different Challenges</div></div>
+  <div class="badge">10 Questions</div>
+</header>
+
+<main>
+<div class="intro">
+<b>🎤 말하기</b> 버튼을 눌러 직접 말해 보세요. 같은 문제를 반복하기보다
+<b>주문하기 → 음식 주기 → 감사하기 → 더 권하기 → 대답하기</b>를 골고루 확인합니다.
+</div>
+
+<div class="topbar">
+  <div class="progress"><div id="bar"></div></div>
+  <div class="counter"><span id="num">1</span> / 10</div>
+</div>
+
+<section class="task">
+  <div id="role" class="role"></div>
+  <div id="prompt" class="prompt"></div>
+  <div id="hint" class="hint"></div>
+  <div id="foods" class="foods"></div>
+  <div id="dialog" class="dialog" style="display:none"></div>
+  <div id="answer" class="answer"></div>
+
+  <div class="buttons">
+    <button class="primary" id="recordBtn" onclick="startSpeaking()">🎤 말하기</button>
+    <button class="secondary" onclick="showAnswer()">👀 문장 확인</button>
+    <button class="secondary" onclick="speakAnswer()">🔊 듣기</button>
+    <button class="success" id="nextBtn" onclick="nextStep()" disabled>✅ 다음</button>
+    <button class="warn" onclick="newSet()">🔄 새 문제 세트</button>
+  </div>
+
+  <div class="speechbox" id="speechBox">
+    <b>내가 말한 문장</b>
+    <div class="speechtext" id="speechText"></div>
+    <div class="feedback" id="speechFeedback"></div>
+  </div>
+</section>
+
+<section class="self" id="self">
+  <h2>SELF CHECK</h2>
+  <p>방금 직접 말한 것을 생각하며 체크하세요.</p>
+  <label class="check"><input type="checkbox" class="sc"><span>I can ask, <b>“What would you like?”</b></span></label>
+  <label class="check"><input type="checkbox" class="sc"><span>I can order <b>one or two foods</b>.</span></label>
+  <label class="check"><input type="checkbox" class="sc"><span>I can say, <b>“Here you are.” / “Thank you.”</b></span></label>
+  <label class="check"><input type="checkbox" class="sc"><span>I can ask, <b>“Would you like some more?”</b></span></label>
+  <label class="check"><input type="checkbox" class="sc"><span>I can answer, <b>“Yes, please.” / “No, thank you.”</b></span></label>
+  <div class="done" id="done">🌟 Great job! Speaking Check 완료!</div>
+  <div class="buttons"><button class="primary" onclick="restart()">처음부터 다시</button></div>
+</section>
+</main>
+
+<div class="footer">Grade 5 English · Lesson 8 · In-flight Meal Speaking Check</div>
+</div></div>
+
+<script>
+const menu = [
+  {name:"bibimbap", emoji:"🍚"},
+  {name:"cheese pizza", emoji:"🍕"},
+  {name:"tomato spaghetti", emoji:"🍝"},
+  {name:"sandwich", emoji:"🥪"},
+  {name:"fish and chips", emoji:"🐟"},
+  {name:"fruit salad", emoji:"🥗"},
+  {name:"carrot cake", emoji:"🍰"},
+  {name:"orange juice", emoji:"🧃"},
+  {name:"water", emoji:"💧"}
+];
+
+let step=0, foods=[];
+
+function shuffled(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+function buildSet(){ foods=shuffled(menu).slice(0,6); }
+
+function steps(){
+  return [
+    {
+      role:"🧑‍✈️ Cabin Crew", cls:"",
+      prompt:"승객에게 무엇을 먹고 싶은지 물어보세요.",
+      hint:"기내식 주문을 시작하는 첫 질문입니다.",
+      foods:[], dialog:"",
+      answer:"What would you like?"
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"이 음식 1개를 주문하세요.",
+      hint:"I’d like ... , please.",
+      foods:[foods[0]], dialog:"",
+      answer:`I'd like ${foods[0].name}, please.`
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"이번에는 음식 2개를 한 문장으로 주문하세요.",
+      hint:"두 음식 사이에 and를 넣으세요.",
+      foods:[foods[1],foods[2]], dialog:"",
+      answer:`I'd like ${foods[1].name} and ${foods[2].name}, please.`
+    },
+    {
+      role:"🧑‍✈️ Cabin Crew", cls:"",
+      prompt:"주문한 음식을 건네며 말하세요.",
+      hint:"음식을 건넬 때 쓰는 짧은 표현입니다.",
+      foods:[foods[3]], dialog:"",
+      answer:"Here you are."
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"음식을 받은 뒤 감사 인사를 하세요.",
+      hint:"짧고 자연스럽게 말하세요.",
+      foods:[], dialog:"🧑‍✈️ Here you are.",
+      answer:"Thank you."
+    },
+    {
+      role:"🧑‍✈️ Cabin Crew", cls:"",
+      prompt:"승객에게 음식을 더 먹을지 물어보세요.",
+      hint:"5차시 핵심 표현입니다.",
+      foods:[], dialog:"",
+      answer:"Would you like some more?"
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"더 먹고 싶다고 대답하세요.",
+      hint:"YES 👍",
+      foods:[], dialog:"🧑‍✈️ Would you like some more?",
+      answer:"Yes, please."
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"이번에는 더 먹지 않겠다고 정중하게 대답하세요.",
+      hint:"NO 👎",
+      foods:[], dialog:"🧑‍✈️ Would you like some more?",
+      answer:"No, thank you."
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"승무원의 질문을 보고 음식 2개를 주문하세요.",
+      hint:"두 음식 사이에 and를 넣고, 끝에는 please를 붙이세요.",
+      foods:[foods[4],foods[5]], dialog:"🧑‍✈️ What would you like?",
+      answer:`I'd like ${foods[4].name} and ${foods[5].name}, please.`
+    },
+    {
+      role:"🧑‍✈️ Cabin Crew", cls:"",
+      prompt:"마지막 미션! 승객에게 더 먹을지 물어보세요.",
+      hint:"완전한 문장으로 자연스럽게 말하세요.",
+      foods:[], dialog:"🙋 Thank you.",
+      answer:"Would you like some more?"
+    }
+  ];
+}
+
+function newSet(){
+  buildSet(); step=0;
+  document.getElementById("self").style.display="none";
+  document.querySelector(".task").style.display="block";
+  render();
+}
+
+function render(){
+  const d=steps()[step];
+  document.getElementById("num").textContent=step+1;
+  document.getElementById("bar").style.width=((step+1)/10*100)+"%";
+
+  const role=document.getElementById("role");
+  role.textContent=d.role; role.className="role "+d.cls;
+
+  document.getElementById("prompt").textContent=d.prompt;
+  document.getElementById("hint").textContent=d.hint;
+
+  const foodbox=document.getElementById("foods");
+  foodbox.innerHTML="";
+  d.foods.forEach(f=>{
+    const el=document.createElement("div");
+    el.className="food";
+    el.textContent=`${f.emoji} ${f.name}`;
+    foodbox.appendChild(el);
+  });
+
+  const dialog=document.getElementById("dialog");
+  if(d.dialog){dialog.style.display="block";dialog.textContent=d.dialog;}
+  else{dialog.style.display="none";dialog.textContent="";}
+
+  const ans=document.getElementById("answer");
+  ans.textContent=d.answer; ans.style.display="none";
+
+  document.getElementById("nextBtn").disabled=true;
+  document.getElementById("speechBox").style.display="none";
+  document.getElementById("speechText").textContent="";
+  document.getElementById("speechFeedback").textContent="";
+}
+
+function normalize(s){
+  return (s||"").toLowerCase()
+    .replace(/[’']/g,"")
+    .replace(/[.,!?]/g,"")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function startSpeaking(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert("음성 인식을 지원하지 않습니다. Chrome에서 열어 주세요.");return;}
+
+  const btn=document.getElementById("recordBtn");
+  btn.disabled=true; btn.textContent="🎙️ 듣는 중...";
+
+  const r=new SR();
+  r.lang="en-US"; r.interimResults=false; r.maxAlternatives=1;
+
+  r.onresult=(e)=>{
+    const spoken=e.results[0][0].transcript;
+    const target=steps()[step].answer;
+
+    document.getElementById("speechBox").style.display="block";
+    document.getElementById("speechText").textContent=spoken;
+
+    const f=document.getElementById("speechFeedback");
+    const sN=normalize(spoken), tN=normalize(target);
+    const tw=tN.split(" "), sw=new Set(sN.split(" "));
+    const matched=tw.filter(w=>sw.has(w)).length;
+    const ratio=matched/Math.max(tw.length,1);
+
+    if(sN===tN||ratio>=0.7){
+      f.textContent="🌟 Good! 잘 말했어요.";
+      f.style.color="#1e6b3a";
+    } else {
+      f.textContent="👍 다시 말해 보거나 ‘문장 확인’을 눌러 보세요.";
+      f.style.color="#8a5a00";
+    }
+    document.getElementById("nextBtn").disabled=false;
+  };
+
+  r.onerror=()=>{
+    document.getElementById("speechBox").style.display="block";
+    const f=document.getElementById("speechFeedback");
+    f.textContent="마이크를 다시 눌러 말해 보세요.";
+    f.style.color="#8a5a00";
+  };
+
+  r.onend=()=>{
+    btn.disabled=false;
+    btn.textContent="🎤 말하기";
+  };
+  r.start();
+}
+
+function showAnswer(){
+  document.getElementById("answer").style.display="block";
+  document.getElementById("nextBtn").disabled=false;
+}
+
+function speakAnswer(){
+  const text=steps()[step].answer;
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="en-US"; u.rate=.82;
+    speechSynthesis.speak(u);
+  } else alert("이 브라우저에서는 듣기를 지원하지 않습니다.");
+}
+
+function nextStep(){
+  if(step<9){step++;render();}
+  else{
+    document.querySelector(".task").style.display="none";
+    document.getElementById("self").style.display="block";
+  }
+}
+
+document.querySelectorAll(".sc").forEach(c=>c.addEventListener("change",()=>{
+  const all=[...document.querySelectorAll(".sc")];
+  document.getElementById("done").style.display=all.every(x=>x.checked)?"block":"none";
+}));
+
+function restart(){
+  document.querySelectorAll(".sc").forEach(x=>x.checked=false);
+  document.getElementById("done").style.display="none";
+  newSet();
+}
+
+newSet();
+</script>
+</body>
+</html>
