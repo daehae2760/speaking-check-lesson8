@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grade 5 Lesson 8 · 5차시 Speaking Practice</title>
+<style>
+:root{
+  --bg:#f6f8fb; --card:#ffffff; --ink:#172033; --muted:#637083;
+  --line:#d9e1eb; --accent:#315efb; --good:#177245; --warn:#9b6a00; --bad:#b42318;
+  --yellow:#fff7df; --green:#eaf7ef;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:920px;margin:0 auto;padding:22px}
+h1{font-size:30px;margin:0 0 6px}
+.sub{color:var(--muted);margin-bottom:18px}
+.panel{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 10px rgba(20,32,52,.05)
+}
+.progress{height:10px;background:#e9edf3;border-radius:999px;overflow:hidden}
+.bar{height:100%;width:0;background:var(--accent);transition:.25s}
+.meta{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-top:7px}
+.role{
+  display:inline-block;padding:7px 12px;border-radius:999px;background:var(--yellow);
+  font-weight:900;margin-bottom:10px
+}
+.role.passenger{background:var(--green)}
+.prompt{font-size:25px;font-weight:900;text-align:center;margin:10px 0 12px;color:#243b6b}
+.hint{text-align:center;font-size:16px;color:var(--muted);margin-bottom:10px}
+.foods{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:15px 0}
+.food{
+  min-width:165px;border:2px solid #e4e9f1;border-radius:18px;background:#fbfcfe;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;text-align:center
+}
+.food .emoji{font-size:48px}
+.food .name{font-size:18px;font-weight:800;margin-top:6px}
+.dialog{
+  margin:14px 0;padding:12px 15px;border-radius:12px;background:#f8fafc;
+  border:1px solid var(--line);font-size:19px;text-align:center
+}
+.answer{
+  display:none;background:#f8fafc;border:1px dashed #b8c4d5;border-radius:12px;
+  padding:13px;text-align:center;font-size:20px;font-weight:800;margin:12px 0
+}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+button{border:none;border-radius:12px;padding:12px 16px;font-size:16px;font-weight:700;cursor:pointer}
+button.primary{background:var(--accent);color:#fff}
+button.secondary{background:#eef2ff;color:#2447c8}
+button.ghost{background:#f2f4f7;color:#344054}
+button.good{background:#eaf7ef;color:var(--good)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.status{
+  min-height:68px;border-radius:12px;padding:12px;margin-top:14px;
+  background:#f8fafc;border:1px solid var(--line);text-align:center
+}
+.transcript{font-size:18px;margin-top:6px;color:#344054;font-weight:700}
+.feedback{margin-top:6px;font-size:14px;color:#475467}
+.goodText{color:var(--good)} .badText{color:var(--bad)}
+.footer{font-size:12px;color:var(--muted);line-height:1.5}
+@media(max-width:700px){
+  .wrap{padding:12px}.prompt{font-size:21px}.food{min-width:135px;flex:1 1 135px}
+  .row button{flex:1 1 auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>✈️ Grade 5 Lesson 8 Speaking Practice</h1>
+  <div class="sub">5차시 · In-flight Meal Service</div>
+
+  <section class="panel">
+    <div class="progress"><div id="bar" class="bar"></div></div>
+    <div class="meta"><span id="qMeta">1 / 8</span><span>🎤 그림과 상황을 보고 말해 보세요.</span></div>
+  </section>
+
+  <section class="panel">
+    <div id="role" class="role"></div>
+    <div id="prompt" class="prompt"></div>
+    <div id="hint" class="hint"></div>
+    <div id="foods" class="foods"></div>
+    <div id="dialog" class="dialog" style="display:none"></div>
+    <div id="answer" class="answer"></div>
+  </section>
+
+  <section class="panel">
+    <div class="row">
+      <button id="speakBtn" class="primary" style="font-size:20px;padding:15px 24px">🎤 Speak</button>
+      <button id="answerBtn" class="secondary">👀 문장 보기</button>
+      <button id="listenBtn" class="secondary">🔊 듣기</button>
+      <button id="nextBtn" class="good">다음 문제 →</button>
+    </div>
+
+    <div id="status" class="status">
+      <div><strong>🎤 Speak를 누르고 영어로 말해 보세요.</strong></div>
+    </div>
+  </section>
+
+  <section class="panel footer">
+    Chrome 또는 Edge 권장 · 처음 사용하는 기기에서는 브라우저가 마이크 사용 여부를 한 번 물을 수 있습니다.
+  </section>
+</div>
+
+<script>
+const menu = [
+  {name:"bibimbap", emoji:"🍚"},
+  {name:"beef steak", emoji:"🥩"},
+  {name:"cheese pizza", emoji:"🍕"},
+  {name:"tomato spaghetti", emoji:"🍝"},
+  {name:"sandwich", emoji:"🥪"},
+  {name:"fish and chips", emoji:"🐟🍟"},
+  {name:"fruit salad", emoji:"🍓🍌"},
+  {name:"carrot cake", emoji:"🥕🍰"},
+  {name:"orange juice", emoji:"🍊🥤"},
+  {name:"water", emoji:"💧"}
+];
+
+let step=0;
+let foods=[menu[0],menu[4],menu[8],menu[6]];
+let currentRecognition=null;
+let audioPlaying=false;
+
+const $=id=>document.getElementById(id);
+
+function tasks(){
+  return [
+    {
+      role:"🧑‍✈️ Cabin Crew", cls:"",
+      prompt:"승객에게 무엇을 먹고 싶은지 물어보세요.",
+      hint:"첫 질문입니다.",
+      foods:[], dialog:"",
+      answer:"What would you like?"
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"음식 1개를 주문하세요.",
+      hint:"I'd like ..., please.",
+      foods:[foods[0]], dialog:"🧑‍✈️ What would you like?",
+      answer:`I'd like ${foods[0].name}, please.`
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"음식 2개를 주문하세요.",
+      hint:"두 음식 사이에 and를 넣으세요.",
+      foods:[foods[1],foods[2]], dialog:"🧑‍✈️ What would you like?",
+      answer:`I'd like ${foods[1].name} and ${foods[2].name}, please.`
+    },
+    {
+      role:"🧑‍✈️ Cabin Crew", cls:"",
+      prompt:"주문한 음식을 건네며 말하세요.",
+      hint:"음식을 건넬 때 쓰는 표현입니다.",
+      foods:[foods[3]], dialog:"",
+      answer:"Here you are."
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"음식을 받은 뒤 감사 인사를 하세요.",
+      hint:"짧게 말하세요.",
+      foods:[], dialog:"🧑‍✈️ Here you are.",
+      answer:"Thank you."
+    },
+    {
+      role:"🧑‍✈️ Cabin Crew", cls:"",
+      prompt:"승객에게 더 먹을지 물어보세요.",
+      hint:"5차시 연결 표현입니다.",
+      foods:[], dialog:"",
+      answer:"Do you want some more?"
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"더 먹고 싶다고 대답하세요.",
+      hint:"YES 👍",
+      foods:[], dialog:"🧑‍✈️ Do you want some more?",
+      answer:"Yes, please."
+    },
+    {
+      role:"🙋 Passenger", cls:"passenger",
+      prompt:"이번에는 더 먹지 않겠다고 대답하세요.",
+      hint:"NO 👎",
+      foods:[], dialog:"🧑‍✈️ Do you want some more?",
+      answer:"No, thanks."
+    }
+  ];
+}
+
+function render(){
+  const d=tasks()[step];
+  $('qMeta').textContent=`${step+1} / 8`;
+  $('bar').style.width=`${((step+1)/8)*100}%`;
+
+  $('role').textContent=d.role;
+  $('role').className="role "+d.cls;
+  $('prompt').textContent=d.prompt;
+  $('hint').textContent=d.hint;
+
+  $('foods').innerHTML="";
+  d.foods.forEach(f=>{
+    const el=document.createElement("div");
+    el.className="food";
+    el.innerHTML=`<div class="emoji">${f.emoji}</div><div class="name">${f.name}</div>`;
+    $('foods').appendChild(el);
+  });
+
+  if(d.dialog){
+    $('dialog').style.display="block";
+    $('dialog').textContent=d.dialog;
+  } else {
+    $('dialog').style.display="none";
+    $('dialog').textContent="";
+  }
+
+  $('answer').textContent=d.answer;
+  $('answer').style.display="none";
+  $('status').innerHTML='<div><strong>🎤 Speak를 누르고 영어로 말해 보세요.</strong></div>';
+  $('speakBtn').disabled=false;
+}
+
+function safeStartRecognition(){
+  // 3차시 HTML과 같은 방식:
+  // 재생 중인 음성을 먼저 끄고, 별도의 마이크 확인 없이 바로 SpeechRecognition 시작
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  audioPlaying=false;
+
+  $('speakBtn').disabled=true;
+  $('status').innerHTML='<div><strong>🎙️ 준비 중…</strong></div><div class="feedback">잠시 후 말해 주세요.</div>';
+
+  setTimeout(startRecognition,700);
+}
+
+function startRecognition(){
+  const SR=window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SR){
+    $('speakBtn').disabled=false;
+    $('status').innerHTML=
+      '<div class="badText"><strong>이 브라우저에서는 음성 인식을 사용할 수 없습니다.</strong></div>'+
+      '<div class="feedback">Chrome 또는 Edge에서 열어 주세요.</div>';
+    return;
+  }
+
+  const rec=new SR();
+  currentRecognition=rec;
+  rec.lang='en-US';
+  rec.interimResults=false;
+  rec.maxAlternatives=3;
+  rec.continuous=false;
+
+  $('status').innerHTML='<div><strong>🎙️ 듣고 있어요… 지금 말해 보세요!</strong></div>';
+
+  rec.onresult=e=>{
+    let bestTranscript='';
+    let bestConfidence=-1;
+
+    for(let i=0;i<e.results[0].length;i++){
+      const alt=e.results[0][i];
+      const confidence=typeof alt.confidence==='number' ? alt.confidence : 0;
+      if(confidence>bestConfidence || !bestTranscript){
+        bestTranscript=alt.transcript;
+        bestConfidence=confidence;
+      }
+    }
+
+    $('status').innerHTML=
+      '<div class="goodText"><strong>✅ 잘 들었어요!</strong></div>'+
+      `<div class="transcript">“${escapeHtml(bestTranscript)}”</div>`+
+      '<div class="feedback">필요하면 다시 Speak를 눌러 한 번 더 말해 보세요.</div>';
+
+    $('speakBtn').disabled=false;
+  };
+
+  rec.onerror=e=>{
+    $('speakBtn').disabled=false;
+
+    let msg='다시 Speak를 눌러 말해 보세요.';
+    if(e.error==='not-allowed') msg='브라우저에서 마이크 사용을 허용해 주세요.';
+    else if(e.error==='no-speech') msg='말소리가 들리지 않았어요. 다시 말해 보세요.';
+    else if(e.error==='audio-capture') msg='마이크를 사용할 수 없어요.';
+    else if(e.error==='network') msg='음성 인식 연결이 되지 않았어요. 다시 시도해 보세요.';
+
+    $('status').innerHTML=`<div class="badText"><strong>${msg}</strong></div>`;
+  };
+
+  rec.onend=()=>{
+    currentRecognition=null;
+    if(!audioPlaying) $('speakBtn').disabled=false;
+  };
+
+  try{
+    rec.start();
+  }catch(err){
+    $('speakBtn').disabled=false;
+    $('status').innerHTML='<div class="badText"><strong>다시 Speak를 눌러 주세요.</strong></div>';
+  }
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c));
+}
+
+function showAnswer(){
+  $('answer').style.display='block';
+}
+
+function setAudioLock(locked){
+  audioPlaying=locked;
+  $('speakBtn').disabled=locked;
+  $('listenBtn').disabled=locked;
+}
+
+function speakAnswer(){
+  if(!('speechSynthesis' in window)) return;
+
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(tasks()[step].answer);
+  u.lang='en-US';
+  u.rate=.78;
+  u.pitch=1;
+  u.onstart=()=>setAudioLock(true);
+  u.onend=()=>setAudioLock(false);
+  u.onerror=()=>setAudioLock(false);
+  window.speechSynthesis.speak(u);
+}
+
+function nextStep(){
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+  if(step<7){
+    step++;
+  } else {
+    step=0;
+    foods=[...menu].sort(()=>Math.random()-.5).slice(0,4);
+  }
+  render();
+}
+
+$('speakBtn').onclick=safeStartRecognition;
+$('answerBtn').onclick=showAnswer;
+$('listenBtn').onclick=speakAnswer;
+$('nextBtn').onclick=nextStep;
+
+render();
+</script>
+</body>
+</html>
