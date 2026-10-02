@@ -116,7 +116,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
     <div class="row" style="margin-top:18px">
       <button id="restartBtn" class="primary">처음부터 다시</button>
     </div>
-    <p class="footer">※ 점수는 브라우저가 인식한 영어와 목표 표현의 일치도를 이용한 연습용 점수입니다. 정확한 발음평가 점수는 아닙니다.</p>
+    <p class="footer">※ 점수는 브라우저가 인식한 영어와 목표 표현의 일치도를 이용한 연습용 점수입니다. 정확한 발음평가 점수는 아니며 핵심 표현 중심의 연습용 점수입니다.</p>
   </section>
 
   <section class="panel footer">
@@ -126,16 +126,16 @@ button:disabled{opacity:.45;cursor:not-allowed}
 
 <script>
 const menu = [
-  {name:"bibimbap", emoji:"🍚"},
-  {name:"beef steak", emoji:"🥩"},
-  {name:"cheese pizza", emoji:"🍕"},
-  {name:"tomato spaghetti", emoji:"🍝"},
-  {name:"sandwich", emoji:"🥪"},
-  {name:"fish and chips", emoji:"🐟🍟"},
-  {name:"fruit salad", emoji:"🍓🍌"},
-  {name:"carrot cake", emoji:"🥕🍰"},
-  {name:"orange juice", emoji:"🍊🥤"},
-  {name:"water", emoji:"💧"}
+  {name:"bibimbap", emoji:"🍚", aliases:["bibimbap","bibim bap","baby bop","bibi map"]},
+  {name:"beef steak", emoji:"🥩", aliases:["beef steak","beefsteak","beef stick","beef stake"]},
+  {name:"cheese pizza", emoji:"🍕", aliases:["cheese pizza","cheesy pizza","cheese pizzas"]},
+  {name:"tomato spaghetti", emoji:"🍝", aliases:["tomato spaghetti","spaghetti","tomato spagetti"]},
+  {name:"sandwich", emoji:"🥪", aliases:["sandwich","sand witch","sandwiches"]},
+  {name:"fish and chips", emoji:"🐟🍟", aliases:["fish and chips","fish chips","fishing chips","fish and chip"]},
+  {name:"fruit salad", emoji:"🍓🍌", aliases:["fruit salad","fruits salad","fruit solid"]},
+  {name:"carrot cake", emoji:"🥕🍰", aliases:["carrot cake","carat cake","carrot cakes"]},
+  {name:"orange juice", emoji:"🍊🥤", aliases:["orange juice","orangejuice","oranges"]},
+  {name:"water", emoji:"💧", aliases:["water","waters","what are"]}
 ];
 
 let step=0;
@@ -211,38 +211,101 @@ function phraseScore(transcript, phrase){
   return best;
 }
 
+function aliasMatch(transcript,item){
+  const t=normalize(transcript);
+  const aliases=item.aliases || [item.name];
+
+  for(const alias of aliases){
+    if(t.includes(normalize(alias))) return 1;
+  }
+
+  const words=t.split(" ");
+  let best=0;
+  for(const alias of aliases){
+    const a=normalize(alias);
+    const aw=a.split(" ");
+    for(let i=0;i<words.length;i++){
+      for(let n=Math.max(1,aw.length-1);n<=aw.length+1;n++){
+        const seg=words.slice(i,i+n).join(" ");
+        if(seg) best=Math.max(best,similarity(seg,a));
+      }
+    }
+  }
+  return best>=0.58 ? best : 0;
+}
+
 function scoreTranscript(transcript, task, index){
   const t=normalize(transcript);
-  const target=normalize(task.answer);
 
-  // 주문 문항은 음식 이름과 핵심 문장틀을 더 중요하게 평가
+  // 주문 문항: 음식 이름을 가장 중요하게 보고 기능어는 관대하게 처리
   if(index===1 || index===2){
-    const itemNames=task.foods.map(f=>f.name);
     let foodTotal=0;
-    itemNames.forEach(name=> foodTotal += phraseScore(t,name));
-    const foodPart = itemNames.length ? 60*(foodTotal/itemNames.length) : 0;
+    task.foods.forEach(item=> foodTotal += aliasMatch(t,item));
 
+    // 음식 이름만 잘 잡혀도 높은 점수를 받을 수 있도록 75점 배점
+    const foodPart = task.foods.length ? 75*(foodTotal/task.foods.length) : 0;
     let frame=0;
-    if(t.includes("i'd like") || t.includes("i would like")) frame+=25;
-    if(t.includes("please")) frame+=10;
-    if(index===2 && t.includes("and")) frame+=5;
-    else if(index===1) frame+=5;
+
+    // "I'd like"가 "I like", "like"로 잡혀도 허용
+    if(t.includes("i'd like") || t.includes("i would like") || t.includes("i like") || t.includes("like")){
+      frame += 15;
+    }
+
+    if(t.includes("please")) frame += 5;
+
+    if(index===2){
+      // and를 못 알아들어도 두 음식이 모두 잡히면 거의 감점하지 않음
+      if(t.includes("and")) frame += 5;
+      else if(foodTotal>=1.45) frame += 4;
+    }else{
+      frame += 5;
+    }
 
     return Math.max(0,Math.min(100,Math.round(foodPart+frame)));
   }
 
-  // 짧은 핵심 표현은 전체 문장 유사도를 사용
-  let sim=similarity(t,target);
+  // 짧은 표현은 핵심 단어만 잡혀도 인정
+  if(index===0){
+    let s=0;
+    if(t.includes("what")) s+=35;
+    if(t.includes("like")) s+=40;
+    if(t.includes("you") || t.includes("do") || t.includes("would")) s+=20;
+    return Math.max(s>=75 ? Math.min(100,s+5) : 0,
+                    Math.round(similarity(t,"what would you like")*100));
+  }
 
-  // 자주 나오는 자연스러운 변형 허용
-  if(index===4 && (t.includes("thank you") || t==="thanks")) sim=Math.max(sim,.95);
-  if(index===6 && (t.includes("yes please") || t==="yes")) sim=Math.max(sim,.88);
-  if(index===7 && (t.includes("no thanks") || t.includes("no thank you"))) sim=Math.max(sim,.95);
-  if(index===3 && t.includes("here you are")) sim=Math.max(sim,1);
-  if(index===5 && t.includes("want") && t.includes("more")) sim=Math.max(sim,.88);
-  if(index===0 && t.includes("what") && t.includes("like")) sim=Math.max(sim,.88);
+  if(index===3){
+    if(t.includes("here") && (t.includes("you") || t.includes("are") || t.includes("go"))) return 95;
+    return Math.round(similarity(t,"here you are")*100);
+  }
 
-  return Math.max(0,Math.min(100,Math.round(sim*100)));
+  if(index===4){
+    if(t.includes("thank") || t.includes("thanks")) return 95;
+    return Math.round(similarity(t,"thank you")*100);
+  }
+
+  if(index===5){
+    let s=0;
+    if(t.includes("want")) s+=35;
+    if(t.includes("more")) s+=40;
+    if(t.includes("you") || t.includes("some") || t.includes("do")) s+=20;
+    return Math.max(s>=75 ? Math.min(100,s+5) : 0,
+                    Math.round(similarity(t,"do you want some more")*100));
+  }
+
+  if(index===6){
+    if(t.includes("yes") && t.includes("please")) return 100;
+    if(t.includes("yes") || t.includes("please")) return 85;
+    return Math.round(similarity(t,"yes please")*100);
+  }
+
+  if(index===7){
+    if(t.includes("no") && (t.includes("thank") || t.includes("thanks"))) return 100;
+    if(t.includes("no")) return 85;
+    return Math.round(similarity(t,"no thanks")*100);
+  }
+
+  return Math.round(similarity(t,task.answer)*100);
 }
 
 function render(){
@@ -279,8 +342,9 @@ function render(){
 }
 
 function safeStartRecognition(){
+  // 3차시에서 잘 작동했던 방식 그대로 사용
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
-  audioPlaying=false;
+  setAudioLock(false);
   $('speakBtn').disabled=true;
   $('status').innerHTML='<div><strong>🎙️ 준비 중…</strong></div><div class="feedback">잠시 후 말해 주세요.</div>';
   setTimeout(startRecognition,700);
@@ -290,41 +354,50 @@ function startRecognition(){
   const SR=window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
     $('speakBtn').disabled=false;
-    $('status').innerHTML='<div class="badText"><strong>이 브라우저에서는 음성 인식을 사용할 수 없습니다.</strong></div><div class="feedback">Chrome 또는 Edge에서 열어 주세요.</div>';
+    $('status').innerHTML='<div class="badText"><strong>이 브라우저에서는 음성 인식을 사용할 수 없습니다.</strong></div><div class="feedback">Chrome 또는 Edge에서 다시 열어 주세요.</div>';
     return;
   }
 
   const rec=new SR();
   currentRecognition=rec;
+
+  // ★ 3차시에서 잘 작동했던 설정 그대로
   rec.lang='en-US';
   rec.interimResults=false;
-  rec.maxAlternatives=5;
+  rec.maxAlternatives=3;
   rec.continuous=false;
 
   $('status').innerHTML='<div><strong>🎙️ 듣고 있어요… 지금 말해 보세요!</strong></div>';
 
   rec.onresult=e=>{
-    let best={score:-1, transcript:""};
+    let best={score:-1, transcript:'', details:null};
 
+    // 3차시처럼 브라우저가 준 3개 후보를 모두 확인
     for(let i=0;i<e.results[0].length;i++){
-      const tr=e.results[0][i].transcript;
-      const sc=scoreTranscript(tr,tasks()[step],step);
-      if(sc>best.score) best={score:sc, transcript:tr};
+      const transcript=e.results[0][i].transcript;
+      const score=scoreTranscript(transcript,tasks()[step],step);
+      if(score>best.score){
+        best={score, transcript};
+      }
     }
 
     attempts[step]++;
     scores[step]=scores[step]===null ? best.score : Math.max(scores[step],best.score);
 
-    let cls="badText", msg="한 번 더 천천히 말해 보세요.";
-    if(best.score>=85){
-      cls="goodText"; msg="🌟 Great! 잘 말했어요.";
-    }else if(best.score>=70){
-      cls="warnText"; msg="👍 거의 좋아요. 한 번 더 말해 보세요.";
+    let cls="badText";
+    let msg="한 번 더 천천히 말해 보세요.";
+
+    if(best.score>=80){
+      cls="goodText";
+      msg="🌟 Great! 잘 말했어요.";
+    }else if(best.score>=60){
+      cls="warnText";
+      msg="👍 거의 좋아요. 한 번 더 말해 보세요.";
     }
 
     $('status').innerHTML=
       `<div class="${cls}"><strong>${msg}</strong></div>`+
-      `<div class="transcript">“${escapeHtml(best.transcript)}”</div>`+
+      `<div class="transcript">인식된 말: “${escapeHtml(best.transcript)}”</div>`+
       `<div class="feedback">이번 시도 ${best.score}점 · 현재 최고 ${scores[step]}점</div>`;
 
     $('speakBtn').disabled=false;
@@ -333,11 +406,12 @@ function startRecognition(){
 
   rec.onerror=e=>{
     $('speakBtn').disabled=false;
-    let msg='다시 Speak를 눌러 말해 보세요.';
-    if(e.error==='not-allowed') msg='브라우저에서 마이크 사용을 허용해 주세요.';
-    else if(e.error==='no-speech') msg='말소리가 들리지 않았어요. 다시 말해 보세요.';
-    else if(e.error==='audio-capture') msg='마이크를 사용할 수 없어요.';
-    else if(e.error==='network') msg='음성 인식 연결이 되지 않았어요. 다시 시도해 보세요.';
+
+    let msg='마이크를 사용할 수 없습니다.';
+    if(e.error==='not-allowed') msg='마이크 권한이 꺼져 있습니다. 브라우저에서 마이크 사용을 허용해 주세요.';
+    if(e.error==='no-speech') msg='말소리가 들리지 않았습니다. Speak를 눌러 다시 말해 보세요.';
+    if(e.error==='network') msg='음성 인식 연결이 되지 않았습니다. 잠시 후 다시 해 보세요.';
+
     $('status').innerHTML=`<div class="badText"><strong>${msg}</strong></div>`;
   };
 
@@ -346,8 +420,9 @@ function startRecognition(){
     if(!audioPlaying) $('speakBtn').disabled=false;
   };
 
-  try{rec.start();}
-  catch(err){
+  try{
+    rec.start();
+  }catch(err){
     $('speakBtn').disabled=false;
     $('status').innerHTML='<div class="badText"><strong>다시 Speak를 눌러 주세요.</strong></div>';
   }
