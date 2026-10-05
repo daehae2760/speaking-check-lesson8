@@ -80,7 +80,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
   <div class="formGrid">
     <div class="formField">
       <label for="gradeInput">학년</label>
-      <input id="gradeInput" type="number" inputmode="numeric" min="1" max="6" value="5" placeholder="예: 5">
+      <input id="gradeInput" type="number" inputmode="numeric" min="1" max="6" value="" placeholder="예: 5">
     </div>
     <div class="formField">
       <label for="classInput">반</label>
@@ -274,7 +274,8 @@ function loadStudentInfo(){
   try{
     const saved=JSON.parse(localStorage.getItem("lesson8StudentInfo")||"null");
     if(saved){
-      if(saved.grade) $("gradeInput").value=saved.grade;
+      // 학년은 매번 학생이 직접 입력하도록 자동 입력하지 않음
+      $("gradeInput").value="";
       if(saved.classNo) $("classInput").value=saved.classNo;
       if(saved.number) $("numberInput").value=saved.number;
       if(saved.name) $("nameInput").value=saved.name;
