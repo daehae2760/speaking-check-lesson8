@@ -46,6 +46,23 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .example{background:#f8fafc;border:1px dashed #b8c4d5;border-radius:12px;padding:10px;text-align:center;margin-top:10px;color:#475467}
 .completeBanner{text-align:center;background:#f5efff;border:2px solid #c9b2f5;border-radius:16px;padding:18px;margin-top:15px}
 .stars{font-size:28px;margin-top:8px}
+
+.studentForm{max-width:650px;margin:20px auto}
+.formGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+.formField label{display:block;font-weight:900;margin-bottom:6px;color:#344054}
+.formField input{width:100%;font-size:18px;padding:13px;border:2px solid var(--line);border-radius:12px;outline:none;background:#fff}
+.formField input:focus{border-color:#8ca5ff}
+.startTitle{text-align:center;font-size:28px;font-weight:900;color:#243b6b}
+.startNote{text-align:center;color:var(--muted);margin-top:7px}
+.studentInfoBar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#eef4ff;border:1px solid #cdd9ff;border-radius:14px;padding:10px 14px;margin:10px 0 4px}
+.studentInfoText{font-weight:900;color:#2447c8}
+.retryOverlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999}
+.retryModal{max-width:520px;width:100%;background:#fff;border-radius:20px;padding:24px;text-align:center;box-shadow:0 12px 40px #0004}
+.retryModal .score{font-size:58px;font-weight:900;color:var(--red);line-height:1}
+.retryModal h2{font-size:25px;margin:10px 0 5px;color:#7a271a}
+.retryModal p{font-size:18px;line-height:1.5;margin:8px 0 18px}
+@media(max-width:650px){.formGrid{grid-template-columns:1fr 1fr}.studentForm{margin:8px auto}}
+
 @media(max-width:650px){
   .opts{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.breakdown{grid-template-columns:repeat(2,1fr)}
   .lamps{grid-template-columns:repeat(5,1fr)}.row button{flex:1}.prompt{font-size:21px}
@@ -57,7 +74,39 @@ button:disabled{opacity:.45;cursor:not-allowed}
 <h1>✈️ Lesson 8 · Practice</h1>
 <div class="sub">기본 10문제 → 90점 이상 → Writing Challenge 10문제</div>
 
-<section id="practice">
+<section id="startScreen" class="card studentForm">
+  <div class="startTitle">👋 학생 정보를 입력하세요</div>
+  <div class="startNote">학년 · 반 · 번호 · 이름을 모두 입력한 뒤 시작하세요.</div>
+  <div class="formGrid">
+    <div class="formField">
+      <label for="gradeInput">학년</label>
+      <input id="gradeInput" type="number" inputmode="numeric" min="1" max="6" value="5" placeholder="예: 5">
+    </div>
+    <div class="formField">
+      <label for="classInput">반</label>
+      <input id="classInput" type="number" inputmode="numeric" min="1" max="20" placeholder="예: 1">
+    </div>
+    <div class="formField">
+      <label for="numberInput">번호</label>
+      <input id="numberInput" type="number" inputmode="numeric" min="1" max="50" placeholder="예: 12">
+    </div>
+    <div class="formField">
+      <label for="nameInput">이름</label>
+      <input id="nameInput" type="text" maxlength="12" placeholder="예: 김민지">
+    </div>
+  </div>
+  <div class="row">
+    <button id="startBtn" class="primary" style="font-size:20px;padding:14px 28px">▶ 시작하기</button>
+  </div>
+  <div id="startError" class="status hidden"><strong class="red">학년, 반, 번호, 이름을 모두 입력하세요.</strong></div>
+</section>
+
+<div id="studentInfoBar" class="studentInfoBar hidden">
+  <span id="studentInfoText" class="studentInfoText"></span>
+  <span class="small">목표: 기본 10문제 90점 이상 🎯</span>
+</div>
+
+<section id="practice" class="hidden">
   <div class="card">
     <div class="bar"><div id="fill" class="fill"></div></div>
     <div class="meta"><span id="qMeta">1 / 10</span><span id="scoreMeta">현재 점수 0 / 100</span></div>
@@ -136,6 +185,17 @@ button:disabled{opacity:.45;cursor:not-allowed}
     </div>
   </div>
 </section>
+
+<div id="retryOverlay" class="retryOverlay hidden">
+  <div class="retryModal">
+    <div>🎯 목표 점수 90점</div>
+    <div id="retryModalScore" class="score">0점</div>
+    <h2>90점이 아직 안 되었어요!</h2>
+    <p>점수가 낮은 문제를 다시 풀어서<br><strong>90점 이상으로 올려 주세요.</strong></p>
+    <button id="retryModalBtn" class="primary" style="font-size:19px;padding:14px 24px">🔄 다시 도전하기</button>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -153,7 +213,49 @@ const menu=[
 const $=id=>document.getElementById(id), shuffle=a=>[...a].sort(()=>Math.random()-.5), pick=a=>a[Math.floor(Math.random()*a.length)];
 let questions=[],order=[],pos=0,scores={},attempts={};
 let writingQuestions=[],wPos=0,wCorrect=[],writingSetsDone=0;
+let studentInfo={grade:"",classNo:"",number:"",name:""};
 let activeRecognition=null;let speakingAudio=false;
+
+
+function loadStudentInfo(){
+  try{
+    const saved=JSON.parse(localStorage.getItem("lesson8StudentInfo")||"null");
+    if(saved){
+      if(saved.grade) $("gradeInput").value=saved.grade;
+      if(saved.classNo) $("classInput").value=saved.classNo;
+      if(saved.number) $("numberInput").value=saved.number;
+      if(saved.name) $("nameInput").value=saved.name;
+    }
+  }catch(e){}
+}
+function startPractice(){
+  const grade=$("gradeInput").value.trim();
+  const classNo=$("classInput").value.trim();
+  const number=$("numberInput").value.trim();
+  const name=$("nameInput").value.trim();
+
+  if(!grade || !classNo || !number || !name){
+    $("startError").classList.remove("hidden");
+    return;
+  }
+  $("startError").classList.add("hidden");
+  studentInfo={grade,classNo,number,name};
+
+  try{localStorage.setItem("lesson8StudentInfo",JSON.stringify(studentInfo));}catch(e){}
+
+  $("studentInfoText").textContent=`${grade}학년 ${classNo}반 ${number}번 ${name}`;
+  $("studentInfoBar").classList.remove("hidden");
+  $("startScreen").classList.add("hidden");
+  $("practice").classList.remove("hidden");
+  newSet();
+}
+function showRetryModal(score){
+  $("retryModalScore").textContent=score+"점";
+  $("retryOverlay").classList.remove("hidden");
+}
+function hideRetryModal(){
+  $("retryOverlay").classList.add("hidden");
+}
 
 function norm(s){
   return (s||"").toLowerCase()
@@ -337,11 +439,12 @@ function result(){
     $("goalText").textContent="Writing Challenge 10문제를 시작할 수 있습니다.";
     $("writingStart").disabled=false;
   }else{
-    $("resultMsg").textContent="조금만 더! 점수를 올려 보세요.";
+    $("resultMsg").textContent="90점 이상이 될 때까지 다시 도전하세요! 🔄";
     $("goalBox").classList.remove("pass");
     $("goalTitle").textContent="🎯 목표 점수는 90점 이상입니다.";
-    $("goalText").textContent=`현재 ${t}점입니다. ‘점수 올리기’를 눌러 다시 도전하세요.`;
+    $("goalText").textContent=`현재 ${t}점입니다. ‘점수 올리기’를 눌러 낮은 점수의 문제에 다시 도전하세요.`;
     $("writingStart").disabled=true;
+    setTimeout(()=>showRetryModal(t),250);
   }
 }
 function retryLow(){
@@ -447,7 +550,8 @@ function startWriting(){
 function newWriting(){writingQuestions=buildWriting();wPos=0;wCorrect=Array(10).fill(false);renderWriting()}
 function backResult(){$("writing").classList.add("hidden");$("done").classList.remove("hidden")}
 
-$("retryLow").onclick=retryLow;
+$("retryLow").onclick=()=>{hideRetryModal();retryLow();};
+$("retryModalBtn").onclick=()=>{hideRetryModal();retryLow();};
 $("newSet").onclick=newSet;
 $("writingStart").onclick=startWriting;
 $("writeCheck").onclick=checkWriting;
@@ -457,7 +561,9 @@ $("newWriting").onclick=newWriting;
 $("backResult").onclick=backResult;
 $("writeInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!$("writeCheck").disabled)checkWriting()});
 
-newSet();
+$("startBtn").onclick=startPractice;
+$("nameInput").addEventListener("keydown",e=>{if(e.key==="Enter")startPractice()});
+loadStudentInfo();
 </script>
 </body>
 </html>
