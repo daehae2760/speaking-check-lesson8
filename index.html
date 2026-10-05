@@ -1,516 +1,435 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grade 5 Lesson 8 · 5차시 Speaking Practice</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 8 · 5차시 Mixed Practice + Writing Challenge</title>
 <style>
 :root{
-  --bg:#f6f8fb; --card:#ffffff; --ink:#172033; --muted:#637083;
-  --line:#d9e1eb; --accent:#315efb; --good:#177245; --warn:#9b6a00; --bad:#b42318;
-  --yellow:#fff7df; --green:#eaf7ef;
+  --bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#667085;--line:#d9e1eb;
+  --blue:#315efb;--green:#177245;--greenbg:#eaf7ef;--yellow:#fff4cc;
+  --orange:#9b6a00;--red:#b42318;--redbg:#fff0ef;--purple:#7a3ee6;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,"Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink)}
-.wrap{max-width:920px;margin:0 auto;padding:22px}
-h1{font-size:30px;margin:0 0 6px}
-.sub{color:var(--muted);margin-bottom:18px}
-.panel{
-  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;
-  margin-bottom:14px;box-shadow:0 3px 10px rgba(20,32,52,.05)
-}
-.progress{height:10px;background:#e9edf3;border-radius:999px;overflow:hidden}
-.bar{height:100%;width:0;background:var(--accent);transition:.25s}
-.meta{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-top:7px}
-.role{display:inline-block;padding:7px 12px;border-radius:999px;background:var(--yellow);font-weight:900;margin-bottom:10px}
-.role.passenger{background:var(--green)}
-.prompt{font-size:25px;font-weight:900;text-align:center;margin:10px 0 12px;color:#243b6b}
-.hint{text-align:center;font-size:16px;color:var(--muted);margin-bottom:10px}
-.foods{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:15px 0}
-.food{
-  min-width:165px;border:2px solid #e4e9f1;border-radius:18px;background:#fbfcfe;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;text-align:center
-}
-.food .emoji{font-size:48px}.food .name{font-size:18px;font-weight:800;margin-top:6px}
-.dialog{margin:14px 0;padding:12px 15px;border-radius:12px;background:#f8fafc;border:1px solid var(--line);font-size:19px;text-align:center}
-.answer{display:none;background:#f8fafc;border:1px dashed #b8c4d5;border-radius:12px;padding:13px;text-align:center;font-size:20px;font-weight:800;margin:12px 0}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
-button{border:none;border-radius:12px;padding:12px 16px;font-size:16px;font-weight:700;cursor:pointer}
-button.primary{background:var(--accent);color:#fff}
-button.secondary{background:#eef2ff;color:#2447c8}
-button.good{background:#eaf7ef;color:var(--good)}
-button.ghost{background:#f2f4f7;color:#344054}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Malgun Gothic",sans-serif}
+.wrap{max-width:920px;margin:auto;padding:16px}
+h1{margin:0 0 5px;font-size:29px}.sub,.small{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 3px 10px #0000000d}
+.bar{height:11px;background:#e8edf4;border-radius:999px;overflow:hidden}.fill{height:100%;background:var(--blue);width:0;transition:.2s}
+.meta{display:flex;justify-content:space-between;gap:12px;margin-top:7px;color:var(--muted);font-size:14px}
+.badge{display:inline-block;padding:7px 12px;border-radius:999px;background:#eef2ff;color:#2447c8;font-weight:900}
+.badge.listen{background:#e9f8ef;color:#17693d}.badge.speak{background:#ffe9f2;color:#9b2457}
+.badge.easy{background:#eaf7ef;color:#177245}.badge.mid{background:#fff4cc;color:#8b6500}.badge.hard{background:#efe8ff;color:#6b34c4}
+.prompt{text-align:center;font-size:24px;font-weight:900;color:#243b6b;line-height:1.4;margin:14px 0}
+.visual{text-align:center;font-size:62px}.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+.opt{border:2px solid var(--line);background:white;border-radius:14px;padding:15px;font-size:17px;font-weight:800;cursor:pointer}
+.opt.ok{background:var(--greenbg);border-color:#8cc9a5;color:var(--green)}.opt.bad{background:var(--redbg);border-color:#e0a7a2;color:var(--red)}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+button{border:0;border-radius:12px;padding:12px 16px;font-size:16px;font-weight:800;cursor:pointer}
+.primary{background:var(--blue);color:white}.secondary{background:#eef2ff;color:#2447c8}.good{background:var(--greenbg);color:var(--green)}
+.purple{background:#efe8ff;color:#6b34c4}.ghost{background:#f1f3f6;color:#344054}
 button:disabled{opacity:.45;cursor:not-allowed}
-.status{
-  min-height:68px;border-radius:12px;padding:12px;margin-top:14px;
-  background:#f8fafc;border:1px solid var(--line);text-align:center
-}
-.transcript{font-size:18px;margin-top:6px;color:#344054;font-weight:700}
-.feedback{margin-top:6px;font-size:14px;color:#475467}
-.goodText{color:var(--good)} .warnText{color:var(--warn)} .badText{color:var(--bad)}
-.hidden{display:none!important}
-.resultHero{text-align:center;padding:18px 8px}
-.bigScore{font-size:64px;font-weight:900;color:var(--accent);line-height:1}
-.resultMsg{font-size:22px;font-weight:900;margin-top:10px}
-.resultgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
-.metric{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
-.metric strong{display:block;font-size:28px;margin-top:5px}
-.breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.qscore{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
-.qscore .n{font-size:13px;color:var(--muted)}.qscore .s{font-size:22px;font-weight:900;margin-top:3px}
-.footer{font-size:12px;color:var(--muted);line-height:1.5}
-@media(max-width:700px){
-  .wrap{padding:12px}.prompt{font-size:21px}.food{min-width:135px;flex:1 1 135px}
-  .row button{flex:1 1 auto}.breakdown{grid-template-columns:repeat(2,1fr)}
+.audio{background:#f8fafc;border:1px dashed #b8c4d5;border-radius:14px;padding:18px;text-align:center;margin:12px 0}
+.status{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;min-height:66px;margin-top:14px}
+.hidden{display:none!important}.green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}
+.result{text-align:center}.big{font-size:68px;font-weight:900;color:var(--blue)}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.metric{background:#f8fafc;border:1px solid var(--line);border-radius:13px;padding:13px;text-align:center}.metric strong{display:block;font-size:27px}
+.breakdown{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.qscore{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:9px;text-align:center}
+.goalBox{border:2px solid #f1c75b;background:#fff8dc;border-radius:16px;padding:16px;text-align:center;margin:16px 0}
+.goalBox.pass{border-color:#8cc9a5;background:#ecf9f1}.goalTitle{font-size:23px;font-weight:900}.goalText{margin-top:5px;font-size:16px}
+.lamps{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:14px 0}
+.lamp{height:54px;border-radius:13px;background:#e9edf3;border:2px solid #d6dce6;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#8a94a6;transition:.2s}
+.lamp.on{background:#fff0a8;border-color:#f4c93f;color:#7a5c00;box-shadow:0 0 14px #ffd95f99}
+.levelLegend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}.pill{padding:6px 10px;border-radius:999px;font-size:13px;font-weight:800}
+.pill.easy{background:#eaf7ef;color:#177245}.pill.mid{background:#fff4cc;color:#8b6500}.pill.hard{background:#efe8ff;color:#6b34c4}
+.writeInput{width:100%;font-size:20px;padding:14px;border:2px solid #cfd7e3;border-radius:13px;outline:none}.writeInput:focus{border-color:#7a97ff}
+.example{background:#f8fafc;border:1px dashed #b8c4d5;border-radius:12px;padding:10px;text-align:center;margin-top:10px;color:#475467}
+.completeBanner{text-align:center;background:#f5efff;border:2px solid #c9b2f5;border-radius:16px;padding:18px;margin-top:15px}
+.stars{font-size:28px;margin-top:8px}
+@media(max-width:650px){
+  .opts{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.breakdown{grid-template-columns:repeat(2,1fr)}
+  .lamps{grid-template-columns:repeat(5,1fr)}.row button{flex:1}.prompt{font-size:21px}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>✈️ Grade 5 Lesson 8 Speaking Practice</h1>
-  <div class="sub">5차시 · In-flight Meal Service</div>
+<h1>✈️ Lesson 8 · Practice</h1>
+<div class="sub">기본 10문제 → 90점 이상 → Writing Challenge 10문제</div>
 
-  <section id="practice">
-    <div class="panel">
-      <div class="progress"><div id="bar" class="bar"></div></div>
-      <div class="meta"><span id="qMeta">1 / 8</span><span>🎤 그림과 상황을 보고 말해 보세요.</span></div>
+<section id="practice">
+  <div class="card">
+    <div class="bar"><div id="fill" class="fill"></div></div>
+    <div class="meta"><span id="qMeta">1 / 10</span><span id="scoreMeta">현재 점수 0 / 100</span></div>
+  </div>
+  <div class="card">
+    <span id="badge" class="badge"></span>
+    <div id="prompt" class="prompt"></div>
+    <div id="content"></div>
+    <div id="actions" class="row"></div>
+    <div id="status" class="status"><strong>문제를 풀어 보세요.</strong></div>
+  </div>
+</section>
+
+<section id="done" class="card hidden">
+  <div class="result">
+    <div>🎉 Basic Practice Complete!</div>
+    <div id="finalScore" class="big">0</div>
+    <div id="resultMsg" style="font-size:21px;font-weight:900"></div>
+  </div>
+  <div class="grid3">
+    <div class="metric">현재 점수<strong id="avg">0점</strong></div>
+    <div class="metric">10점 만점<strong id="perfect">0 / 10</strong></div>
+    <div class="metric">총 도전 횟수<strong id="tries">0</strong></div>
+  </div>
+
+  <div id="goalBox" class="goalBox">
+    <div id="goalTitle" class="goalTitle"></div>
+    <div id="goalText" class="goalText"></div>
+  </div>
+
+  <h3>문항별 최고점</h3>
+  <div id="breakdown" class="breakdown"></div>
+
+  <div class="row">
+    <button id="retryLow" class="good">🔄 점수 올리기</button>
+    <button id="writingStart" class="purple">✍️ Writing Challenge 시작</button>
+    <button id="newSet" class="primary">새 기본 10문제</button>
+  </div>
+  <div class="small" style="margin-top:12px;text-align:center">기본 10문제는 여러 번 다시 도전할 수 있고 최고점만 저장됩니다.</div>
+</section>
+
+<section id="writing" class="hidden">
+  <div class="card">
+    <div class="meta"><strong>✍️ Writing Challenge</strong><span id="writingMeta">1 / 10</span></div>
+    <div class="lamps" id="lamps"></div>
+    <div class="levelLegend">
+      <span class="pill easy">하 1~3</span>
+      <span class="pill mid">중 4~7</span>
+      <span class="pill hard">고 8~10</span>
     </div>
+  </div>
 
-    <section class="panel">
-      <div id="role" class="role"></div>
-      <div id="prompt" class="prompt"></div>
-      <div id="hint" class="hint"></div>
-      <div id="foods" class="foods"></div>
-      <div id="dialog" class="dialog" style="display:none"></div>
-      <div id="answer" class="answer"></div>
-    </section>
+  <div class="card">
+    <span id="writeBadge" class="badge easy"></span>
+    <div id="writePrompt" class="prompt"></div>
+    <div id="writeVisual" class="visual"></div>
+    <input id="writeInput" class="writeInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="영어로 써 보세요.">
+    <div id="writeExample" class="example hidden"></div>
+    <div class="row">
+      <button id="writeCheck" class="primary">✓ 확인</button>
+      <button id="writeHint" class="secondary">💡 힌트</button>
+      <button id="writeNext" class="good hidden">다음 문제 →</button>
+    </div>
+    <div id="writeStatus" class="status"><strong>정답을 쓰고 확인을 누르세요.</strong></div>
+  </div>
 
-    <section class="panel">
+  <div id="writingComplete" class="card hidden">
+    <div class="completeBanner">
+      <div style="font-size:25px;font-weight:900">🌟 Writing Challenge Complete!</div>
+      <div style="margin-top:7px">10개의 불을 모두 켰어요!</div>
+      <div class="stars" id="starCount"></div>
       <div class="row">
-        <button id="speakBtn" class="primary" style="font-size:20px;padding:15px 24px">🎤 Speak</button>
-        <button id="answerBtn" class="secondary">👀 문장 보기</button>
-        <button id="listenBtn" class="secondary">🔊 듣기</button>
-        <button id="nextBtn" class="good" disabled>다음 문제 →</button>
+        <button id="newWriting" class="purple">🔥 새로운 Writing 10문제</button>
+        <button id="backResult" class="secondary">기본 결과 보기</button>
       </div>
-      <div id="status" class="status">
-        <div><strong>🎤 Speak를 누르고 영어로 말해 보세요.</strong></div>
-      </div>
-    </section>
-  </section>
-
-  <section id="done" class="panel hidden">
-    <div class="resultHero">
-      <div>🎉 Speaking Practice Complete!</div>
-      <div class="bigScore"><span id="avgScore">0</span></div>
-      <div class="resultMsg" id="resultMsg"></div>
     </div>
-
-    <div class="resultgrid">
-      <div class="metric">평균 점수<strong id="avgMetric">0점</strong></div>
-      <div class="metric">80점 이상<strong id="passMetric">0 / 8</strong></div>
-    </div>
-
-    <h3>문항별 최고 점수</h3>
-    <div id="breakdown" class="breakdown"></div>
-
-    <div class="row" style="margin-top:18px">
-      <button id="restartBtn" class="primary">처음부터 다시</button>
-    </div>
-    <p class="footer">※ 점수는 브라우저가 인식한 영어와 목표 표현의 일치도를 이용한 연습용 점수입니다. 정확한 발음평가 점수는 아니며 핵심 표현 중심의 연습용 점수입니다.</p>
-  </section>
-
-  <section class="panel footer">
-    Chrome 또는 Edge 권장 · 처음 사용하는 기기에서는 브라우저가 마이크 사용 여부를 한 번 물을 수 있습니다.
-  </section>
+  </div>
+</section>
 </div>
 
 <script>
-const menu = [
-  {name:"beef steak", emoji:"🥩", aliases:["beef steak","beefsteak","beef stick","beef stake"]},
-  {name:"cheese pizza", emoji:"🍕", aliases:["cheese pizza","cheesy pizza","cheese pizzas"]},
-  {name:"tomato spaghetti", emoji:"🍝", aliases:["tomato spaghetti","spaghetti","tomato spagetti"]},
-  {name:"sandwich", emoji:"🥪", aliases:["sandwich","sand witch","sandwiches"]},
-  {name:"fish and chips", emoji:"🐟🍟", aliases:["fish and chips","fish chips","fishing chips","fish and chip"]},
-  {name:"fruit salad", emoji:"🍓🍌", aliases:["fruit salad","fruits salad","fruit solid"]},
-  {name:"carrot cake", emoji:"🥕🍰", aliases:["carrot cake","carat cake","carrot cakes"]},
-  {name:"orange juice", emoji:"🍊🥤", aliases:["orange juice","orangejuice","oranges"]},
-  {name:"water", emoji:"💧", aliases:["water","waters","what are"]}
+const menu=[
+{name:"beef steak",emoji:"🥩"},{name:"cheese pizza",emoji:"🍕"},{name:"tomato spaghetti",emoji:"🍝"},
+{name:"sandwich",emoji:"🥪"},{name:"fish and chips",emoji:"🐟🍟"},{name:"fruit salad",emoji:"🍓🍌"},
+{name:"carrot cake",emoji:"🥕🍰"},{name:"orange juice",emoji:"🍊🥤"},{name:"water",emoji:"💧"}
 ];
+const $=id=>document.getElementById(id), shuffle=a=>[...a].sort(()=>Math.random()-.5), pick=a=>a[Math.floor(Math.random()*a.length)];
+let questions=[],order=[],pos=0,scores={},attempts={};
+let writingQuestions=[],wPos=0,wCorrect=[],writingSetsDone=0;
 
-let step=0;
-let foods=[menu[0],menu[4],menu[8],menu[6]];
-let currentRecognition=null;
-let audioPlaying=false;
-let scores=Array(8).fill(null);
-let attempts=Array(8).fill(0);
+function norm(s){
+  return (s||"").toLowerCase()
+    .replace(/[’‘]/g,"'")
+    .replace(/i would/g,"i'd")
+    .replace(/[^a-z' ]/g," ")
+    .replace(/\s+/g," ").trim()
+}
+function lev(a,b){
+  a=norm(a);b=norm(b);
+  const d=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));
+  for(let i=0;i<=a.length;i++)d[i][0]=i;
+  for(let j=0;j<=b.length;j++)d[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[a.length][b.length]
+}
+function sim(a,b){a=norm(a);b=norm(b);if(!a||!b)return 0;return Math.max(0,1-lev(a,b)/Math.max(a.length,b.length))}
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 
-const $=id=>document.getElementById(id);
-
-function tasks(){
+function buildQuestions(){
+  const m=shuffle(menu),a=m[0],b=m[1],c=m[2],d=m[3],e=m[4],f=m[5];
   return [
-    {role:"🧑‍✈️ Cabin Crew", cls:"", prompt:"승객에게 무엇을 먹고 싶은지 물어보세요.", hint:"첫 질문입니다.", foods:[], dialog:"", answer:"What would you like?"},
-    {role:"🙋 Passenger", cls:"passenger", prompt:"음식 1개를 주문하세요.", hint:"I'd like ..., please.", foods:[foods[0]], dialog:"🧑‍✈️ What would you like?", answer:`I'd like ${foods[0].name}, please.`},
-    {role:"🙋 Passenger", cls:"passenger", prompt:"음식 2개를 주문하세요.", hint:"두 음식 사이에 and를 넣으세요.", foods:[foods[1],foods[2]], dialog:"🧑‍✈️ What would you like?", answer:`I'd like ${foods[1].name} and ${foods[2].name}, please.`},
-    {role:"🧑‍✈️ Cabin Crew", cls:"", prompt:"주문한 음식을 건네며 말하세요.", hint:"음식을 건넬 때 쓰는 표현입니다.", foods:[foods[3]], dialog:"", answer:"Here you are."},
-    {role:"🙋 Passenger", cls:"passenger", prompt:"음식을 받은 뒤 감사 인사를 하세요.", hint:"짧게 말하세요.", foods:[], dialog:"🧑‍✈️ Here you are.", answer:"Thank you."},
-    {role:"🧑‍✈️ Cabin Crew", cls:"", prompt:"승객에게 더 먹을지 물어보세요.", hint:"5차시 연결 표현입니다.", foods:[], dialog:"", answer:"Do you want some more?"},
-    {role:"🙋 Passenger", cls:"passenger", prompt:"더 먹고 싶다고 대답하세요.", hint:"YES 👍", foods:[], dialog:"🧑‍✈️ Do you want some more?", answer:"Yes, please."},
-    {role:"🙋 Passenger", cls:"passenger", prompt:"이번에는 더 먹지 않겠다고 대답하세요.", hint:"NO 👎", foods:[], dialog:"🧑‍✈️ Do you want some more?", answer:"No, thanks."}
+    {id:"v1",type:"word",label:"🔤 단어 찾기",prompt:"그림에 맞는 영어 단어를 고르세요.",emoji:a.emoji,answer:a.name,options:shuffle([a.name,...shuffle(menu.filter(x=>x.name!==a.name)).slice(0,3).map(x=>x.name)])},
+    {id:"v2",type:"word",label:"🔤 단어 찾기",prompt:`“${b.name}”에 맞는 그림을 고르세요.`,answer:b.emoji,options:shuffle([b.emoji,...shuffle(menu.filter(x=>x.name!==b.name)).slice(0,3).map(x=>x.emoji)])},
+    {id:"s1",type:"sentence",label:"🧩 문장 찾기",prompt:"“무엇을 드시겠어요?”에 맞는 문장을 고르세요.",answer:"What would you like?",options:shuffle(["What would you like?","Here you are.","Thank you.","Yes, please."])},
+    {id:"s2",type:"sentence",label:"🧩 문장 찾기",prompt:`${c.emoji} ${c.name}을 주문하는 문장을 고르세요.`,answer:`I'd like ${c.name}, please.`,options:shuffle([`I'd like ${c.name}, please.`,"Do you want some more?","Here you are.","No, thank you."])},
+    {id:"l1",type:"listen",label:"🔊 듣기",prompt:"영어를 듣고 주문한 음식을 고르세요.",audio:`I'd like ${d.name}, please.`,answer:d.name,options:shuffle([d.name,...shuffle(menu.filter(x=>x.name!==d.name)).slice(0,3).map(x=>x.name)])},
+    {id:"l2",type:"listen2",label:"🔊 듣기",prompt:"영어를 듣고 주문한 음식 두 개를 고르세요.",audio:`I'd like ${e.name} and ${f.name}, please.`,answer:[e.name,f.name].sort().join("|"),options:shuffle([e.name,f.name,...shuffle(menu.filter(x=>x.name!==e.name&&x.name!==f.name)).slice(0,2).map(x=>x.name)])},
+    {id:"l3",type:"listen",label:"🔊 듣기",prompt:"영어를 듣고 알맞은 대답을 고르세요.",audio:"Do you want some more?",answer:"No, thank you.",options:shuffle(["Yes, I do.","No, thank you.","Here you are.","What would you like?"])},
+    {id:"d1",type:"sentence",label:"💬 대화",prompt:"“Here you are.” 다음에 가장 자연스러운 말을 고르세요.",answer:"Thank you.",options:shuffle(["Thank you.","What would you like?","No, thanks.","I'd like water, please."])},
+    {id:"sp1",type:"speak",label:"🎤 말하기",prompt:"승객에게 무엇을 먹고 싶은지 물어보세요.",target:"What would you like?",kind:"question"},
+    {id:"sp2",type:"speak",label:"🎤 말하기",prompt:"더 먹지 않겠다고 정중하게 말해 보세요.",target:"No, thanks.",kind:"no"}
   ];
 }
-
-function normalize(s){
-  return (s||"").toLowerCase()
-    .replace(/i would/g,"i'd")
-    .replace(/\bid like\b/g,"i'd like")
-    .replace(/\bno thank you\b/g,"no thanks")
-    .replace(/\bthank you very much\b/g,"thank you")
-    .replace(/orangejuice/g,"orange juice")
-    .replace(/fish & chips/g,"fish and chips")
-    .replace(/[^a-z' ]/g," ")
-    .replace(/\s+/g," ")
-    .trim();
+function separated(qs){
+  const sp=shuffle(qs.filter(q=>q.type==="speak")),non=shuffle(qs.filter(q=>q.type!=="speak"));
+  const p1=pick([2,3,4]),p2=pick([7,8,9]),arr=new Array(10);arr[p1]=sp[0];arr[p2]=sp[1];
+  let n=0;for(let i=0;i<10;i++)if(!arr[i])arr[i]=non[n++];return arr
 }
-
-function levenshtein(a,b){
-  a=normalize(a); b=normalize(b);
-  const dp=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));
-  for(let i=0;i<=a.length;i++) dp[i][0]=i;
-  for(let j=0;j<=b.length;j++) dp[0][j]=j;
-  for(let i=1;i<=a.length;i++){
-    for(let j=1;j<=b.length;j++){
-      dp[i][j]=Math.min(
-        dp[i-1][j]+1,
-        dp[i][j-1]+1,
-        dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1)
-      );
-    }
-  }
-  return dp[a.length][b.length];
-}
-
-function similarity(a,b){
-  const x=normalize(a), y=normalize(b);
-  if(!x || !y) return 0;
-  return Math.max(0,1-levenshtein(x,y)/Math.max(x.length,y.length));
-}
-
-function phraseScore(transcript, phrase){
-  const t=normalize(transcript), p=normalize(phrase);
-  if(t.includes(p)) return 1;
-  const words=t.split(" ");
-  const pw=p.split(" ");
-  let best=0;
-  for(let i=0;i<words.length;i++){
-    for(let n=Math.max(1,pw.length-1);n<=pw.length+1;n++){
-      const seg=words.slice(i,i+n).join(" ");
-      if(seg) best=Math.max(best,similarity(seg,p));
-    }
-  }
-  return best;
-}
-
-function aliasMatch(transcript,item){
-  const t=normalize(transcript);
-  const aliases=item.aliases || [item.name];
-
-  for(const alias of aliases){
-    if(t.includes(normalize(alias))) return 1;
-  }
-
-  const words=t.split(" ");
-  let best=0;
-  for(const alias of aliases){
-    const a=normalize(alias);
-    const aw=a.split(" ");
-    for(let i=0;i<words.length;i++){
-      for(let n=Math.max(1,aw.length-1);n<=aw.length+1;n++){
-        const seg=words.slice(i,i+n).join(" ");
-        if(seg) best=Math.max(best,similarity(seg,a));
-      }
-    }
-  }
-  return best>=0.58 ? best : 0;
-}
-
-function scoreTranscript(transcript, task, index){
-  const t=normalize(transcript);
-
-  // 주문 문항: 음식 이름을 가장 중요하게 보고 기능어는 관대하게 처리
-  if(index===1 || index===2){
-    let foodTotal=0;
-    task.foods.forEach(item=> foodTotal += aliasMatch(t,item));
-
-    // 음식 이름만 잘 잡혀도 높은 점수를 받을 수 있도록 75점 배점
-    const foodPart = task.foods.length ? 75*(foodTotal/task.foods.length) : 0;
-    let frame=0;
-
-    // "I'd like"가 "I like", "like"로 잡혀도 허용
-    if(t.includes("i'd like") || t.includes("i would like") || t.includes("i like") || t.includes("like")){
-      frame += 15;
-    }
-
-    if(t.includes("please")) frame += 5;
-
-    if(index===2){
-      // and를 못 알아들어도 두 음식이 모두 잡히면 거의 감점하지 않음
-      if(t.includes("and")) frame += 5;
-      else if(foodTotal>=1.45) frame += 4;
-    }else{
-      frame += 5;
-    }
-
-    return Math.max(0,Math.min(100,Math.round(foodPart+frame)));
-  }
-
-  // 짧은 표현은 핵심 단어만 잡혀도 인정
-  if(index===0){
-    let s=0;
-    if(t.includes("what")) s+=35;
-    if(t.includes("like")) s+=40;
-    if(t.includes("you") || t.includes("do") || t.includes("would")) s+=20;
-    return Math.max(s>=75 ? Math.min(100,s+5) : 0,
-                    Math.round(similarity(t,"what would you like")*100));
-  }
-
-  if(index===3){
-    if(t.includes("here") && (t.includes("you") || t.includes("are") || t.includes("go"))) return 95;
-    return Math.round(similarity(t,"here you are")*100);
-  }
-
-  if(index===4){
-    if(t.includes("thank") || t.includes("thanks")) return 95;
-    return Math.round(similarity(t,"thank you")*100);
-  }
-
-  if(index===5){
-    let s=0;
-    if(t.includes("want")) s+=35;
-    if(t.includes("more")) s+=40;
-    if(t.includes("you") || t.includes("some") || t.includes("do")) s+=20;
-    return Math.max(s>=75 ? Math.min(100,s+5) : 0,
-                    Math.round(similarity(t,"do you want some more")*100));
-  }
-
-  if(index===6){
-    if(t.includes("yes") && t.includes("please")) return 100;
-    if(t.includes("yes") || t.includes("please")) return 85;
-    return Math.round(similarity(t,"yes please")*100);
-  }
-
-  if(index===7){
-    if(t.includes("no") && (t.includes("thank") || t.includes("thanks"))) return 100;
-    if(t.includes("no")) return 85;
-    return Math.round(similarity(t,"no thanks")*100);
-  }
-
-  return Math.round(similarity(t,task.answer)*100);
-}
+function total(){return questions.reduce((s,q)=>s+(scores[q.id]||0),0)}
+function totalAttempts(){return Object.values(attempts).reduce((a,b)=>a+b,0)}
+function meta(){$("scoreMeta").textContent=`현재 점수 ${total()} / 100`}
 
 function render(){
-  const d=tasks()[step];
-  $('qMeta').textContent=`${step+1} / 8`;
-  $('bar').style.width=`${((step+1)/8)*100}%`;
-
-  $('role').textContent=d.role;
-  $('role').className="role "+d.cls;
-  $('prompt').textContent=d.prompt;
-  $('hint').textContent=d.hint;
-
-  $('foods').innerHTML="";
-  d.foods.forEach(f=>{
-    const el=document.createElement("div");
-    el.className="food";
-    el.innerHTML=`<div class="emoji">${f.emoji}</div><div class="name">${f.name}</div>`;
-    $('foods').appendChild(el);
+  const q=order[pos];
+  $("qMeta").textContent=`${pos+1} / ${order.length}`;$("fill").style.width=`${(pos+1)/order.length*100}%`;
+  $("badge").textContent=q.label;$("badge").className="badge "+(q.type==="speak"?"speak":q.type.startsWith("listen")?"listen":"");
+  $("prompt").textContent=q.prompt;$("content").innerHTML="";$("actions").innerHTML="";$("status").innerHTML="<strong>문제를 풀어 보세요.</strong>";meta();
+  if(q.type==="word"||q.type==="sentence")choice(q);
+  else if(q.type==="listen")listening(q);
+  else if(q.type==="listen2")listening2(q);
+  else speaking(q)
+}
+function optionGrid(q,after){
+  const box=document.createElement("div");box.className="opts";
+  q.options.forEach(o=>{const b=document.createElement("button");b.className="opt";b.textContent=o;b.onclick=()=>after(o,b,box);box.appendChild(b)});
+  $("content").appendChild(box);return box
+}
+function choice(q){
+  if(q.emoji)$("content").innerHTML=`<div class="visual">${q.emoji}</div>`;
+  optionGrid(q,(o,b,box)=>{
+    attempts[q.id]=(attempts[q.id]||0)+1;
+    if(o===q.answer){scores[q.id]=10;b.classList.add("ok");[...box.children].forEach(x=>x.disabled=true);$("status").innerHTML='<strong class="green">✅ 정답! 10점</strong>';nextBtn()}
+    else{b.classList.add("bad");b.disabled=true;$("status").innerHTML='<strong class="red">다시 도전해 보세요.</strong>'}
+    meta()
+  })
+}
+function addAudio(q){
+  const d=document.createElement("div");d.className="audio";
+  d.innerHTML='<button class="primary">🔊 듣기</button><div class="small">필요하면 여러 번 들을 수 있어요.</div>';
+  d.querySelector("button").onclick=()=>speakText(q.audio);$("content").appendChild(d)
+}
+function listening(q){
+  addAudio(q);optionGrid(q,(o,b,box)=>{
+    attempts[q.id]=(attempts[q.id]||0)+1;
+    if(o===q.answer){scores[q.id]=10;b.classList.add("ok");[...box.children].forEach(x=>x.disabled=true);$("status").innerHTML='<strong class="green">✅ 정답! 10점</strong>';nextBtn()}
+    else{b.classList.add("bad");b.disabled=true;$("status").innerHTML='<strong class="red">다시 들어보고 도전하세요.</strong>'}
+    meta()
+  })
+}
+function listening2(q){
+  addAudio(q);const selected=new Set(),box=optionGrid(q,(o,b)=>{
+    if(selected.has(o)){selected.delete(o);b.classList.remove("ok")}
+    else if(selected.size<2){selected.add(o);b.classList.add("ok")}
   });
+  const check=document.createElement("button");check.className="primary";check.textContent="선택 확인";
+  check.onclick=()=>{
+    if(selected.size!==2){$("status").innerHTML='<strong class="orange">음식 두 개를 고르세요.</strong>';return}
+    attempts[q.id]=(attempts[q.id]||0)+1;
+    if([...selected].sort().join("|")===q.answer){
+      scores[q.id]=10;[...box.children].forEach(x=>x.disabled=true);check.disabled=true;
+      $("status").innerHTML='<strong class="green">✅ 정답! 10점</strong>';nextBtn()
+    }else{
+      selected.clear();[...box.children].forEach(x=>x.classList.remove("ok"));
+      $("status").innerHTML='<strong class="red">다시 듣고 두 개를 골라 보세요.</strong>'
+    }meta()
+  };$("actions").appendChild(check)
+}
+function speaking(q){
+  $("content").innerHTML='<div class="audio"><div style="font-size:44px">🎤</div><strong>Speak를 누른 뒤 말하세요.</strong><div class="small">짧은 핵심 표현만 확인합니다.</div></div>';
+  const sp=document.createElement("button");sp.className="primary";sp.textContent="🎤 Speak";sp.onclick=()=>recognize(q,sp);
+  const show=document.createElement("button");show.className="secondary";show.textContent="👀 문장 보기";
+  show.onclick=()=>{$("status").innerHTML=`<strong>${q.kind==="no"?"No, thanks. / No, thank you.":q.target}</strong>`};
+  const li=document.createElement("button");li.className="secondary";li.textContent="🔊 듣기";li.onclick=()=>speakText(q.target);
+  $("actions").append(sp,show,li)
+}
+function speechScore(q,t){
+  t=norm(t);
+  if(q.kind==="question"){
+    let s=0;if(t.includes("what"))s+=35;if(t.includes("like"))s+=40;if(t.includes("you")||t.includes("would")||t.includes("do"))s+=20;
+    return Math.max(s>=75?Math.min(100,s+5):0,Math.round(sim(t,"what would you like")*100))
+  }
+  if(q.kind==="no"){
+    if(t.includes("no")&&(t.includes("thanks")||t.includes("thank")))return 100;
+    if(t.includes("no"))return 82;if(t.includes("thanks")||t.includes("thank"))return 75;
+    return Math.max(Math.round(sim(t,"no thanks")*100),Math.round(sim(t,"no thank you")*100))
+  }
+  return Math.round(sim(t,q.target)*100)
+}
+function recognize(q,btn){
+  if("speechSynthesis"in window)speechSynthesis.cancel();
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){$("status").innerHTML='<strong class="red">Chrome 또는 Edge에서 열어 주세요.</strong>';return}
+  btn.disabled=true;btn.textContent="🎙️ 듣는 중...";$("status").innerHTML="<strong>🎙️ 지금 말하세요!</strong>";
+  const r=new SR();r.lang="en-US";r.interimResults=false;r.maxAlternatives=3;r.continuous=false;
+  r.onresult=e=>{
+    let best={s:-1,t:""};
+    for(let i=0;i<e.results[0].length;i++){const t=e.results[0][i].transcript,s=speechScore(q,t);if(s>best.s)best={s,t}}
+    attempts[q.id]=(attempts[q.id]||0)+1;
+    const pts=best.s>=85?10:best.s>=70?8:best.s>=55?6:Math.max(2,Math.round(best.s/10));
+    scores[q.id]=Math.max(scores[q.id]||0,pts);
+    $("status").innerHTML=`<strong class="${pts===10?"green":pts>=6?"orange":"red"}">${pts===10?"🌟 Great! 10점":"다시 도전하면 점수를 올릴 수 있어요."}</strong><div>${esc(best.t)}</div><div class="small">이 문제 최고 ${scores[q.id]} / 10</div>`;
+    btn.disabled=false;btn.textContent="🎤 다시 Speak";meta();nextBtn()
+  };
+  r.onerror=e=>{
+    btn.disabled=false;btn.textContent="🎤 다시 Speak";
+    $("status").innerHTML=`<strong class="red">${e.error==="no-speech"?"말소리가 들리지 않았어요. 다시 말해 보세요.":"다시 눌러 말해 보세요."}</strong>`
+  };
+  try{r.start()}catch(e){btn.disabled=false;btn.textContent="🎤 Speak"}
+}
+function speakText(t){
+  if(!("speechSynthesis"in window))return;
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.78;speechSynthesis.speak(u)
+}
+function nextBtn(){
+  if($("next"))return;
+  const b=document.createElement("button");b.id="next";b.className="good";b.textContent=pos===order.length-1?"결과 보기 →":"다음 문제 →";
+  b.onclick=()=>{if(pos<order.length-1){pos++;render()}else result()};$("actions").appendChild(b)
+}
+function result(){
+  $("practice").classList.add("hidden");$("done").classList.remove("hidden");$("writing").classList.add("hidden");
+  const t=total(),p=questions.filter(q=>(scores[q.id]||0)===10).length;
+  $("finalScore").textContent=t;$("avg").textContent=t+"점";$("perfect").textContent=p+" / 10";$("tries").textContent=totalAttempts();
+  $("breakdown").innerHTML="";
+  questions.forEach((q,i)=>{const d=document.createElement("div");d.className="qscore";d.innerHTML=`<div class="small">${i+1}. ${q.label}</div><strong>${scores[q.id]||0}점</strong>`;$("breakdown").appendChild(d)});
+  const low=questions.filter(q=>(scores[q.id]||0)<10);
+  $("retryLow").classList.toggle("hidden",!low.length);
+  $("retryLow").textContent=`🔄 점수 올리기 (${low.length}문제)`;
 
-  if(d.dialog){
-    $('dialog').style.display="block";
-    $('dialog').textContent=d.dialog;
+  if(t>=90){
+    $("resultMsg").textContent="목표 달성! Writing Challenge로 가세요. ✍️";
+    $("goalBox").classList.add("pass");
+    $("goalTitle").textContent="✅ 90점 이상 목표 달성!";
+    $("goalText").textContent="Writing Challenge 10문제를 시작할 수 있습니다.";
+    $("writingStart").disabled=false;
   }else{
-    $('dialog').style.display="none";
-    $('dialog').textContent="";
-  }
-
-  $('answer').textContent=d.answer;
-  $('answer').style.display="none";
-  $('status').innerHTML='<div><strong>🎤 Speak를 누르고 영어로 말해 보세요.</strong></div>';
-  $('speakBtn').disabled=false;
-  $('nextBtn').disabled=(scores[step]===null);
-}
-
-function safeStartRecognition(){
-  // 3차시에서 잘 작동했던 방식 그대로 사용
-  if('speechSynthesis' in window) window.speechSynthesis.cancel();
-  setAudioLock(false);
-  $('speakBtn').disabled=true;
-  $('status').innerHTML='<div><strong>🎙️ 준비 중…</strong></div><div class="feedback">잠시 후 말해 주세요.</div>';
-  setTimeout(startRecognition,700);
-}
-
-function startRecognition(){
-  const SR=window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){
-    $('speakBtn').disabled=false;
-    $('status').innerHTML='<div class="badText"><strong>이 브라우저에서는 음성 인식을 사용할 수 없습니다.</strong></div><div class="feedback">Chrome 또는 Edge에서 다시 열어 주세요.</div>';
-    return;
-  }
-
-  const rec=new SR();
-  currentRecognition=rec;
-
-  // ★ 3차시에서 잘 작동했던 설정 그대로
-  rec.lang='en-US';
-  rec.interimResults=false;
-  rec.maxAlternatives=3;
-  rec.continuous=false;
-
-  $('status').innerHTML='<div><strong>🎙️ 듣고 있어요… 지금 말해 보세요!</strong></div>';
-
-  rec.onresult=e=>{
-    let best={score:-1, transcript:'', details:null};
-
-    // 3차시처럼 브라우저가 준 3개 후보를 모두 확인
-    for(let i=0;i<e.results[0].length;i++){
-      const transcript=e.results[0][i].transcript;
-      const score=scoreTranscript(transcript,tasks()[step],step);
-      if(score>best.score){
-        best={score, transcript};
-      }
-    }
-
-    attempts[step]++;
-    scores[step]=scores[step]===null ? best.score : Math.max(scores[step],best.score);
-
-    let cls="badText";
-    let msg="한 번 더 천천히 말해 보세요.";
-
-    if(best.score>=80){
-      cls="goodText";
-      msg="🌟 Great! 잘 말했어요.";
-    }else if(best.score>=60){
-      cls="warnText";
-      msg="👍 거의 좋아요. 한 번 더 말해 보세요.";
-    }
-
-    $('status').innerHTML=
-      `<div class="${cls}"><strong>${msg}</strong></div>`+
-      `<div class="transcript">인식된 말: “${escapeHtml(best.transcript)}”</div>`+
-      `<div class="feedback">이번 시도 ${best.score}점 · 현재 최고 ${scores[step]}점</div>`;
-
-    $('speakBtn').disabled=false;
-    $('nextBtn').disabled=false;
-  };
-
-  rec.onerror=e=>{
-    $('speakBtn').disabled=false;
-
-    let msg='마이크를 사용할 수 없습니다.';
-    if(e.error==='not-allowed') msg='마이크 권한이 꺼져 있습니다. 브라우저에서 마이크 사용을 허용해 주세요.';
-    if(e.error==='no-speech') msg='말소리가 들리지 않았습니다. Speak를 눌러 다시 말해 보세요.';
-    if(e.error==='network') msg='음성 인식 연결이 되지 않았습니다. 잠시 후 다시 해 보세요.';
-
-    $('status').innerHTML=`<div class="badText"><strong>${msg}</strong></div>`;
-  };
-
-  rec.onend=()=>{
-    currentRecognition=null;
-    if(!audioPlaying) $('speakBtn').disabled=false;
-  };
-
-  try{
-    rec.start();
-  }catch(err){
-    $('speakBtn').disabled=false;
-    $('status').innerHTML='<div class="badText"><strong>다시 Speak를 눌러 주세요.</strong></div>';
+    $("resultMsg").textContent="조금만 더! 점수를 올려 보세요.";
+    $("goalBox").classList.remove("pass");
+    $("goalTitle").textContent="🎯 목표 점수는 90점 이상입니다.";
+    $("goalText").textContent=`현재 ${t}점입니다. ‘점수 올리기’를 눌러 다시 도전하세요.`;
+    $("writingStart").disabled=true;
   }
 }
-
-function escapeHtml(s){
-  return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]||c));
+function retryLow(){
+  const low=questions.filter(q=>(scores[q.id]||0)<10);if(!low.length)return;
+  const sp=low.filter(q=>q.type==="speak"),non=shuffle(low.filter(q=>q.type!=="speak"));
+  if(sp.length===2&&low.length>=4){order=[...non];order.splice(Math.min(1,order.length),0,sp[0]);order.push(sp[1])}
+  else order=shuffle(low);
+  pos=0;$("done").classList.add("hidden");$("practice").classList.remove("hidden");render()
+}
+function newSet(){
+  questions=buildQuestions();order=separated(questions);pos=0;scores={};attempts={};
+  $("done").classList.add("hidden");$("writing").classList.add("hidden");$("practice").classList.remove("hidden");render()
 }
 
-function showAnswer(){
-  $('answer').style.display='block';
+/* ---------- Writing Challenge ---------- */
+function buildWriting(){
+  const m=shuffle(menu),a=m[0],b=m[1],c=m[2],d=m[3],e=m[4],f=m[5];
+  return [
+    {level:"하",prompt:"그림을 보고 음식 이름을 영어로 쓰세요.",emoji:a.emoji,answers:[a.name],hint:`첫 글자: ${a.name[0].toUpperCase()}`},
+    {level:"하",prompt:"“고맙습니다.”를 영어로 쓰세요.",emoji:"🙏",answers:["Thank you"],hint:"Thank ___"},
+    {level:"하",prompt:"음식을 건네며 하는 말을 영어로 쓰세요.",emoji:"🤲",answers:["Here you are"],hint:"Here ___ ___."},
+
+    {level:"중",prompt:`${b.emoji} ${b.name}을 주문하는 문장을 쓰세요.`,emoji:b.emoji,answers:[`I'd like ${b.name}, please`,`I would like ${b.name}, please`],hint:"I'd like ___, please."},
+    {level:"중",prompt:"“무엇을 드시겠어요?”를 영어로 쓰세요.",emoji:"🧑‍✈️",answers:["What would you like"],hint:"What ___ you like?"},
+    {level:"중",prompt:"“더 드시겠어요?”를 영어로 쓰세요.",emoji:"🍽️",answers:["Do you want some more"],hint:"Do you want ___ ___?"},
+    {level:"중",prompt:"더 먹지 않겠다고 정중하게 쓰세요.",emoji:"🙅",answers:["No thanks","No thank you"],hint:"No, ___."},
+
+    {level:"고",prompt:`두 가지 음식을 한 문장으로 주문하세요: ${c.emoji} ${c.name} + ${d.emoji} ${d.name}`,emoji:`${c.emoji} ${d.emoji}`,answers:[`I'd like ${c.name} and ${d.name}, please`,`I would like ${c.name} and ${d.name}, please`],hint:"I'd like ___ and ___, please."},
+    {level:"고",prompt:`상황: 승무원이 “What would you like?”라고 물었습니다. ${e.emoji} ${e.name}을 주문하는 완전한 문장을 쓰세요.`,emoji:e.emoji,answers:[`I'd like ${e.name}, please`,`I would like ${e.name}, please`],hint:"완전한 주문 문장을 쓰세요."},
+    {level:"고",prompt:`두 문장을 순서대로 쓰세요. ① ${f.emoji} ${f.name} 주문하기 ② 더 먹지 않겠다고 답하기`,emoji:f.emoji,answers:[
+      `I'd like ${f.name}, please. No, thanks.`,
+      `I'd like ${f.name}, please. No, thank you.`,
+      `I would like ${f.name}, please. No, thanks.`,
+      `I would like ${f.name}, please. No, thank you.`
+    ],hint:"① I'd like ___, please. ② No, ___."}
+  ]
 }
-
-function setAudioLock(locked){
-  audioPlaying=locked;
-  $('speakBtn').disabled=locked;
-  $('listenBtn').disabled=locked;
+function normalizeWrite(s){return norm(s).replace(/\bi would\b/g,"i'd")}
+function closeEnough(input,answers,level){
+  const x=normalizeWrite(input);
+  for(const ans of answers){
+    const y=normalizeWrite(ans);
+    if(x===y)return true;
+    // 하: 단어/짧은 문장은 철자 1글자 정도 허용
+    const threshold=level==="하"?0.88:level==="중"?0.91:0.93;
+    if(sim(x,y)>=threshold)return true;
+  }
+  return false
 }
-
-function speakAnswer(){
-  if(!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(tasks()[step].answer);
-  u.lang='en-US';
-  u.rate=.78;
-  u.pitch=1;
-  u.onstart=()=>setAudioLock(true);
-  u.onend=()=>setAudioLock(false);
-  u.onerror=()=>setAudioLock(false);
-  window.speechSynthesis.speak(u);
+function makeLamps(){
+  $("lamps").innerHTML="";
+  for(let i=0;i<10;i++){
+    const d=document.createElement("div");d.className="lamp"+(wCorrect[i]?" on":"");d.textContent=i+1;$("lamps").appendChild(d)
+  }
 }
-
-function nextStep(){
-  if(scores[step]===null) return;
-  if('speechSynthesis' in window) window.speechSynthesis.cancel();
-
-  if(step<7){
-    step++;
-    render();
+function renderWriting(){
+  $("writingComplete").classList.add("hidden");
+  const q=writingQuestions[wPos];
+  $("writingMeta").textContent=`${wPos+1} / 10`;
+  $("writeBadge").textContent=`난이도 ${q.level}`;
+  $("writeBadge").className="badge "+(q.level==="하"?"easy":q.level==="중"?"mid":"hard");
+  $("writePrompt").textContent=q.prompt;$("writeVisual").textContent=q.emoji||"";
+  $("writeInput").value="";$("writeInput").disabled=false;$("writeInput").focus();
+  $("writeExample").classList.add("hidden");$("writeExample").textContent="";
+  $("writeNext").classList.add("hidden");$("writeCheck").disabled=false;
+  $("writeStatus").innerHTML="<strong>정답을 쓰고 확인을 누르세요.</strong>";
+  makeLamps()
+}
+function checkWriting(){
+  const q=writingQuestions[wPos],input=$("writeInput").value.trim();
+  if(!input){$("writeStatus").innerHTML='<strong class="orange">영어로 먼저 써 보세요.</strong>';return}
+  if(closeEnough(input,q.answers,q.level)){
+    wCorrect[wPos]=true;makeLamps();
+    $("writeStatus").innerHTML='<strong class="green">💡 불이 켜졌어요! 정답입니다.</strong>';
+    $("writeInput").disabled=true;$("writeCheck").disabled=true;$("writeNext").classList.remove("hidden");
+    $("writeNext").textContent=wPos===9?"완료 보기 →":"다음 문제 →"
   }else{
-    finish();
+    $("writeStatus").innerHTML='<strong class="red">아직 불이 안 켜졌어요. 다시 써 보세요.</strong><div class="small">철자와 단어 순서를 확인하세요.</div>';
+    $("writeInput").select()
   }
 }
-
-function finish(){
-  $('practice').classList.add('hidden');
-  $('done').classList.remove('hidden');
-
-  const valid=scores.map(s=>s===null?0:s);
-  const avg=Math.round(valid.reduce((a,b)=>a+b,0)/valid.length);
-  const pass=valid.filter(s=>s>=80).length;
-
-  $('avgScore').textContent=avg;
-  $('avgMetric').textContent=avg+"점";
-  $('passMetric').textContent=pass+" / 8";
-
-  let msg="Keep practicing! 조금 더 연습해 봐요.";
-  if(avg>=90) msg="Excellent! 정말 잘했어요! 🌟";
-  else if(avg>=80) msg="Great job! 아주 잘했어요! 👍";
-  else if(avg>=70) msg="Good! 한 번 더 연습하면 더 좋아져요.";
-
-  $('resultMsg').textContent=msg;
-
-  $('breakdown').innerHTML="";
-  valid.forEach((s,i)=>{
-    const d=document.createElement('div');
-    d.className='qscore';
-    d.innerHTML=`<div class="n">${i+1}번</div><div class="s">${s}점</div>`;
-    $('breakdown').appendChild(d);
-  });
+function nextWriting(){
+  if(!wCorrect[wPos])return;
+  if(wPos<9){wPos++;renderWriting()}
+  else finishWriting()
 }
-
-function restart(){
-  step=0;
-  scores=Array(8).fill(null);
-  attempts=Array(8).fill(0);
-  foods=[...menu].sort(()=>Math.random()-.5).slice(0,4);
-  $('done').classList.add('hidden');
-  $('practice').classList.remove('hidden');
-  render();
+function finishWriting(){
+  writingSetsDone++;
+  $("writingComplete").classList.remove("hidden");
+  $("starCount").textContent="⭐".repeat(Math.min(writingSetsDone,8)) + (writingSetsDone>8?` × ${writingSetsDone}`:"");
+  $("writeStatus").innerHTML='<strong class="green">🌟 10개의 불을 모두 켰어요!</strong>';
+  $("writeInput").disabled=true;$("writeCheck").disabled=true;$("writeNext").classList.add("hidden")
 }
+function startWriting(){
+  writingQuestions=buildWriting();wPos=0;wCorrect=Array(10).fill(false);
+  $("practice").classList.add("hidden");$("done").classList.add("hidden");$("writing").classList.remove("hidden");renderWriting()
+}
+function newWriting(){writingQuestions=buildWriting();wPos=0;wCorrect=Array(10).fill(false);renderWriting()}
+function backResult(){$("writing").classList.add("hidden");$("done").classList.remove("hidden")}
 
-$('speakBtn').onclick=safeStartRecognition;
-$('answerBtn').onclick=showAnswer;
-$('listenBtn').onclick=speakAnswer;
-$('nextBtn').onclick=nextStep;
-$('restartBtn').onclick=restart;
+$("retryLow").onclick=retryLow;
+$("newSet").onclick=newSet;
+$("writingStart").onclick=startWriting;
+$("writeCheck").onclick=checkWriting;
+$("writeNext").onclick=nextWriting;
+$("writeHint").onclick=()=>{const q=writingQuestions[wPos];$("writeExample").textContent="💡 "+q.hint;$("writeExample").classList.remove("hidden")};
+$("newWriting").onclick=newWriting;
+$("backResult").onclick=backResult;
+$("writeInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!$("writeCheck").disabled)checkWriting()});
 
-render();
+newSet();
 </script>
 </body>
 </html>
