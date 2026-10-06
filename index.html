@@ -61,6 +61,16 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .retryModal .score{font-size:58px;font-weight:900;color:var(--red);line-height:1}
 .retryModal h2{font-size:25px;margin:10px 0 5px;color:#7a271a}
 .retryModal p{font-size:18px;line-height:1.5;margin:8px 0 18px}
+.writingOverlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:20px;z-index:10000}
+.writingModal{max-width:560px;width:100%;background:#fff;border-radius:22px;padding:28px;text-align:center;box-shadow:0 12px 40px #0004;border:4px solid #b99cff}
+.writingModal .bigIcon{font-size:58px;line-height:1}
+.writingModal h2{font-size:28px;margin:10px 0 7px;color:#5b2bb8}
+.writingModal p{font-size:19px;line-height:1.55;margin:8px 0 20px}
+.writingGoBtn{background:#7a3ee6;color:white;font-size:23px;padding:17px 26px;border-radius:16px;width:100%;box-shadow:0 5px 14px #7a3ee633}
+.nextStepBox{background:#f3edff;border:3px solid #b99cff;border-radius:18px;padding:18px;margin:16px 0;text-align:center}
+.nextStepTitle{font-size:23px;font-weight:900;color:#5b2bb8;margin-bottom:10px}
+.nextStepBtn{background:#7a3ee6;color:#fff;font-size:22px;padding:16px 24px;border-radius:15px;width:min(100%,520px)}
+
 @media(max-width:650px){.formGrid{grid-template-columns:1fr 1fr}.studentForm{margin:8px auto}}
 
 @media(max-width:650px){
@@ -137,13 +147,17 @@ button:disabled{opacity:.45;cursor:not-allowed}
     <div id="goalText" class="goalText"></div>
   </div>
 
+  <div id="nextWritingBox" class="nextStepBox hidden">
+    <div class="nextStepTitle">✅ 기본 10문제 끝! 이제 쓰기로 가세요.</div>
+    <button id="writingStart" class="nextStepBtn">✍️ 다음 단계: Writing 시작 →</button>
+  </div>
+
   <h3>문항별 최고점</h3>
   <div id="breakdown" class="breakdown"></div>
 
   <div class="row">
     <button id="retryLow" class="good">🔄 점수 올리기</button>
-    <button id="writingStart" class="purple">✍️ Writing Challenge 시작</button>
-    <button id="newSet" class="primary">새 기본 10문제</button>
+    <button id="newSet" class="ghost">새 기본 10문제</button>
   </div>
   <div class="small" style="margin-top:12px;text-align:center">기본 10문제는 여러 번 다시 도전할 수 있고 최고점만 저장됩니다.</div>
 </section>
@@ -193,6 +207,15 @@ button:disabled{opacity:.45;cursor:not-allowed}
     <h2>90점이 아직 안 되었어요!</h2>
     <p>점수가 낮은 문제를 다시 풀어서<br><strong>90점 이상으로 올려 주세요.</strong></p>
     <button id="retryModalBtn" class="primary" style="font-size:19px;padding:14px 24px">🔄 다시 도전하기</button>
+  </div>
+</div>
+
+<div id="writingOverlay" class="writingOverlay hidden">
+  <div class="writingModal">
+    <div class="bigIcon">🎉✍️</div>
+    <h2>90점 이상 성공!</h2>
+    <p>기본 10문제가 끝났어요.<br><strong>이제 Writing 쓰기로 이동하세요.</strong></p>
+    <button id="writingGoBtn" class="writingGoBtn">Writing 시작하기 →</button>
   </div>
 </div>
 
@@ -310,6 +333,12 @@ function showRetryModal(score){
 }
 function hideRetryModal(){
   $("retryOverlay").classList.add("hidden");
+}
+function showWritingModal(){
+  $("writingOverlay").classList.remove("hidden");
+}
+function hideWritingModal(){
+  $("writingOverlay").classList.add("hidden");
 }
 
 function norm(s){
@@ -492,14 +521,18 @@ function result(){
   $("retryLow").textContent=`🔄 점수 올리기 (${low.length}문제)`;
 
   if(t>=90){
-    $("resultMsg").textContent="목표 달성! Writing Challenge로 가세요. ✍️";
+    $("resultMsg").textContent="목표 달성! 이제 Writing 쓰기로 이동하세요. ✍️";
     $("goalBox").classList.add("pass");
     $("goalTitle").textContent="✅ 90점 이상 목표 달성!";
-    $("goalText").textContent="Writing Challenge 10문제를 시작할 수 있습니다.";
+    $("goalText").textContent="아래 큰 보라색 버튼을 눌러 Writing을 시작하세요.";
+    $("nextWritingBox").classList.remove("hidden");
     $("writingStart").disabled=false;
+    $("retryLow").classList.add("hidden");
     retryMode=false;
     sendProgress("Basic","90점 이상","10/10");
+    setTimeout(showWritingModal,350);
   }else{
+    $("nextWritingBox").classList.add("hidden");
     $("resultMsg").textContent="90점 이상이 될 때까지 다시 도전하세요! 🔄";
     $("goalBox").classList.remove("pass");
     $("goalTitle").textContent="🎯 목표 점수는 90점 이상입니다.";
@@ -617,6 +650,7 @@ function finishWriting(){
   sendProgress("Writing","완료","10/10");
 }
 function startWriting(){
+  hideWritingModal();
   writingQuestions=buildWriting();wPos=0;wCorrect=Array(10).fill(false);
   retryMode=false;
   $("practice").classList.add("hidden");$("done").classList.add("hidden");$("writing").classList.remove("hidden");renderWriting();
@@ -628,6 +662,7 @@ function newWriting(){
 }
 function backResult(){
   $("writing").classList.add("hidden");$("done").classList.remove("hidden");
+  if(total()>=90) $("nextWritingBox").classList.remove("hidden");
   sendProgress("Basic",total()>=90?"90점 이상":"90점 재도전","10/10");
 }
 
@@ -635,6 +670,7 @@ $("retryLow").onclick=()=>{hideRetryModal();retryLow();};
 $("retryModalBtn").onclick=()=>{hideRetryModal();retryLow();};
 $("newSet").onclick=newSet;
 $("writingStart").onclick=startWriting;
+$("writingGoBtn").onclick=startWriting;
 $("writeCheck").onclick=checkWriting;
 $("writeNext").onclick=nextWriting;
 $("writeHint").onclick=()=>{const q=writingQuestions[wPos];$("writeExample").textContent="💡 "+q.hint;$("writeExample").classList.remove("hidden")};
