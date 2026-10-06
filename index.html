@@ -163,7 +163,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
     <span id="writeBadge" class="badge easy"></span>
     <div id="writePrompt" class="prompt"></div>
     <div id="writeVisual" class="visual"></div>
-    <input id="writeInput" class="writeInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="영어로 써 보세요.">
+    <input id="writeInput" class="writeInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="영어로 써 보세요. (띄어쓰기·쉼표·마침표는 괜찮아요)">
     <div id="writeExample" class="example hidden"></div>
     <div class="row">
       <button id="writeCheck" class="primary">✓ 확인</button>
@@ -547,7 +547,12 @@ function buildWriting(){
     ],hint:"① I'd like ___, please. ② No, ___."}
   ]
 }
-function normalizeWrite(s){return norm(s).replace(/\bi would\b/g,"i'd")}
+function normalizeWrite(s){
+  // 쓰기 채점에서는 쉼표·마침표·띄어쓰기를 무시합니다.
+  return norm(s)
+    .replace(/\bi would\b/g,"i'd")
+    .replace(/\s+/g,"");
+}
 function closeEnough(input,answers,level){
   const x=normalizeWrite(input);
   for(const ans of answers){
